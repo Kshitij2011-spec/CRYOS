@@ -295,27 +295,39 @@ export function AppLayout({ children }: Props) {
     return () => document.removeEventListener('keydown', handleKey);
   }, [isMobileNavOpen]);
 
+  // Prevent body/viewport scrolling while AppLayout is active so #ct-scroll-root is the sole scroll container
+  useEffect(() => {
+    const origHtmlOverflow = document.documentElement.style.overflow;
+    const origBodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.documentElement.style.overflow = origHtmlOverflow;
+      document.body.style.overflow = origBodyOverflow;
+    };
+  }, []);
+
   // Prevent body scroll when mobile nav is open
   useEffect(() => {
     if (isMobileNavOpen) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = 'hidden';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => { document.body.style.overflow = 'hidden'; };
   }, [isMobileNavOpen]);
 
   const pageInfo = PAGE_TITLES[location.pathname] ?? { section: 'CRYOS', title: 'Platform' };
   const closeMobileNav = useCallback(() => setIsMobileNavOpen(false), []);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-canvas text-foreground">
+    <div className="relative flex h-screen w-full overflow-hidden bg-canvas text-foreground">
 
       {/* ── Desktop Sidebar (≥768px) with Collapsible width ────────────── */}
       <aside
         className={`hidden md:flex ${
           isCollapsed ? 'w-[72px]' : 'w-[240px]'
-        } shrink-0 border-r border-[var(--border-color)] bg-surface flex-col transition-all duration-200`}
+        } shrink-0 border-r border-[var(--border-color)] bg-surface flex-col transition-all duration-200 relative z-20`}
         aria-label="Main navigation"
       >
         <SidebarContent
@@ -370,11 +382,11 @@ export function AppLayout({ children }: Props) {
       {/* ── Main Area ───────────────────────────────────────────────────── */}
       {/*
         SCROLL ARCHITECTURE:
-        - main: overflow-hidden (NOT the scroll container)
+        - main: overflow-hidden, relative containing block (NOT the scroll container)
         - header: shrink-0, outside the scroll container — stays fixed
-        - #ct-scroll-root: flex-1 min-h-0 overflow-y-auto — THE sole scroll container
+        - #ct-scroll-root: relative flex-1 min-h-0 overflow-y-auto — THE sole scroll container
       */}
-      <main className="flex-1 overflow-hidden bg-canvas flex flex-col min-w-0">
+      <main className="relative flex-1 overflow-hidden bg-canvas flex flex-col min-w-0 h-full">
 
         {/* Top bar — sits OUTSIDE the scroll container so it never moves */}
         <header className="h-12 px-4 border-b border-[var(--border-color)] bg-surface/90 backdrop-blur-md flex items-center justify-between gap-3 shrink-0 z-30">
@@ -414,12 +426,14 @@ export function AppLayout({ children }: Props) {
         </header>
 
         {/* ── Primary scroll container ─────────────────────────────────────
-            min-h-0 is CRITICAL: without it, a flex child refuses to shrink
-            and the body grows instead of this div scrolling.
+            min-h-0 and relative are CRITICAL:
+            - min-h-0: prevents flex child from expanding parent beyond viewport
+            - relative: establishes positioned containing block so descendant
+              absolute elements (e.g. .sr-only) never escape to the html viewport
         ─────────────────────────────────────────────────────────────────── */}
         <div
           id={CONTENT_SCROLL_ID}
-          className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+          className="relative flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
         >
           <div className="px-4 sm:px-6 py-6 max-w-screen-2xl mx-auto">
             {children}

@@ -109,6 +109,13 @@
     height: 100%;
   }
 
+  /* Prevent viewport double-scrolling when inside AppLayout */
+  html:has(#ct-scroll-root),
+  body:has(#ct-scroll-root) {
+    overflow: hidden;
+    height: 100%;
+  }
+
   /* Prevent theme flash */
   *, *::before, *::after {
     transition-property: background-color, border-color, color, fill, stroke;

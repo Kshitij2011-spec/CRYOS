@@ -85,9 +85,14 @@
   html {
     -webkit-text-size-adjust: 100%;
     font-size: 16px;
+    /* Full viewport height so the AppLayout flex chain can calculate
+       remaining height correctly. Landing page uses natural document flow
+       and is not affected (it lives outside AppLayout). */
+    height: 100%;
   }
 
   body {
+    height: 100%;
     background-color: var(--color-canvas);
     color: var(--color-foreground);
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -97,6 +102,11 @@
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
     transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  /* React root — must fill viewport to complete the flex height chain */
+  #root {
+    height: 100%;
   }
 
   /* Prevent theme flash */

@@ -42,12 +42,24 @@ const PAGE_TITLES: Record<string, { section: string; title: string }> = {
 
 // ─── Quick Jump Select (Requirement 31) ──────────────────────────────────────
 
+// Scroll constant — the ID of the primary app content scroll container
+const CONTENT_SCROLL_ID = 'ct-scroll-root';
+
 function QuickJumpSelect() {
-  const handleJump = (id: string) => {
-    if (!id) return;
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleJump = (sectionId: string) => {
+    if (!sectionId) return;
+    // Target the section inside the named scroll container, not window
+    const scrollRoot = document.getElementById(CONTENT_SCROLL_ID);
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+    if (scrollRoot) {
+      // Scroll the container to the target, accounting for the fixed top header (48px)
+      const containerTop = scrollRoot.getBoundingClientRect().top;
+      const targetTop = target.getBoundingClientRect().top;
+      const offset = targetTop - containerTop + scrollRoot.scrollTop - 8;
+      scrollRoot.scrollTo({ top: offset, behavior: 'smooth' });
+    } else {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -356,10 +368,16 @@ export function AppLayout({ children }: Props) {
       )}
 
       {/* ── Main Area ───────────────────────────────────────────────────── */}
-      <main className="flex-1 overflow-auto bg-canvas flex flex-col min-w-0">
+      {/*
+        SCROLL ARCHITECTURE:
+        - main: overflow-hidden (NOT the scroll container)
+        - header: shrink-0, outside the scroll container — stays fixed
+        - #ct-scroll-root: flex-1 min-h-0 overflow-y-auto — THE sole scroll container
+      */}
+      <main className="flex-1 overflow-hidden bg-canvas flex flex-col min-w-0">
 
-        {/* Top bar (Requirement 17: Compact, Operations / Control Tower, Sync + Theme) */}
-        <header className="sticky top-0 z-30 h-12 px-4 border-b border-[var(--border-color)] bg-surface/90 backdrop-blur-md flex items-center justify-between gap-3 shrink-0">
+        {/* Top bar — sits OUTSIDE the scroll container so it never moves */}
+        <header className="h-12 px-4 border-b border-[var(--border-color)] bg-surface/90 backdrop-blur-md flex items-center justify-between gap-3 shrink-0 z-30">
 
           {/* Left: hamburger (mobile) + breadcrumb */}
           <div className="flex items-center gap-3 min-w-0">
@@ -383,7 +401,7 @@ export function AppLayout({ children }: Props) {
             </nav>
           </div>
 
-          {/* Right: Quick Jump + sync indicator + theme toggle (Requirement 30 & 31) */}
+          {/* Right: Quick Jump + sync indicator + theme toggle */}
           <div className="flex items-center gap-2 shrink-0">
             {location.pathname === '/control-tower' && (
               <QuickJumpSelect />
@@ -395,8 +413,14 @@ export function AppLayout({ children }: Props) {
           </div>
         </header>
 
-        {/* Page content */}
-        <div className="flex-1 overflow-auto">
+        {/* ── Primary scroll container ─────────────────────────────────────
+            min-h-0 is CRITICAL: without it, a flex child refuses to shrink
+            and the body grows instead of this div scrolling.
+        ─────────────────────────────────────────────────────────────────── */}
+        <div
+          id={CONTENT_SCROLL_ID}
+          className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+        >
           <div className="px-4 sm:px-6 py-6 max-w-screen-2xl mx-auto">
             {children}
           </div>

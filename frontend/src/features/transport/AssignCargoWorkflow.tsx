@@ -55,19 +55,19 @@ export function AssignCargoWorkflow({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-4 rounded-xl border border-slate-800 bg-slate-900/80 space-y-3.5 text-xs"
+      className="p-4 rounded-xl border border-border bg-surface space-y-3.5 text-xs"
     >
       <div className="flex items-center gap-2">
-        <PackagePlus className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-        <h4 className="font-semibold text-slate-200">Manifest Cargo Consignment</h4>
+        <PackagePlus className="w-4 h-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
+        <h4 className="font-semibold text-foreground">Manifest Cargo Consignment</h4>
       </div>
 
-      <p className="text-slate-400">
+      <p className="text-foreground-secondary">
         Assign a cargo consignment to this transport leg. The consignment will move via this leg schedule.
       </p>
 
       {errorMsg && (
-        <div className="text-rose-400 p-2.5 rounded bg-rose-950/40 border border-rose-800/60 flex items-center gap-2">
+        <div className="text-rose-700 dark:text-rose-300 p-2.5 rounded bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800/60 flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
@@ -75,11 +75,11 @@ export function AssignCargoWorkflow({
 
       {/* Select from available consignments */}
       <div>
-        <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+        <label className="block eyebrow mb-1.5">
           Select Available Consignment
         </label>
         {loadingConsignments ? (
-          <p className="text-slate-500 italic">Loading consignments…</p>
+          <p className="text-foreground-muted italic">Loading consignments…</p>
         ) : availableConsignments.length > 0 ? (
           <select
             value={selectedConsignmentId}
@@ -87,7 +87,7 @@ export function AssignCargoWorkflow({
               setSelectedConsignmentId(e.target.value);
               setManualId('');
             }}
-            className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs focus:outline-none focus:border-cyan-600"
+            className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border text-foreground text-sm focus:outline-none focus:border-cyan-600"
           >
             <option value="">-- Choose Consignment --</option>
             {availableConsignments.map((c) => (
@@ -97,13 +97,13 @@ export function AssignCargoWorkflow({
             ))}
           </select>
         ) : (
-          <p className="text-slate-500 text-[11px]">No unassigned consignments loaded in cache.</p>
+          <p className="text-foreground-muted text-[11px]">No unassigned consignments loaded in cache.</p>
         )}
       </div>
 
       {/* Or manual UUID input */}
       <div>
-        <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+        <label className="block eyebrow mb-1.5">
           Or Enter Consignment UUID Directly
         </label>
         <input
@@ -114,7 +114,7 @@ export function AssignCargoWorkflow({
             setSelectedConsignmentId('');
           }}
           placeholder="00000000-0000-0000-0000-000000000000"
-          className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs focus:outline-none focus:border-cyan-600"
+          className="w-full px-3 py-2 rounded-lg bg-surface-elevated border border-border text-foreground font-mono text-xs focus:outline-none focus:border-cyan-600"
         />
       </div>
 
@@ -122,7 +122,7 @@ export function AssignCargoWorkflow({
         <button
           type="button"
           onClick={onCancel}
-          className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 text-xs"
+          className="px-3 py-1.5 rounded-lg text-foreground-secondary hover:text-foreground text-xs transition-colors"
         >
           Cancel
         </button>

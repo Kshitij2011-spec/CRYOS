@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AppLayout } from './AppLayout';
+import { LandingPage } from '../features/landing/LandingPage';
 import { ControlTowerPage } from '../features/control-tower/ControlTowerPage';
 import { LocationsPage } from '../features/locations/LocationsPage';
 import { CargoPage } from '../features/cargo/CargoPage';
@@ -10,18 +11,71 @@ import { IncidentsPage } from '../features/incidents/IncidentsPage';
 
 export default function App() {
   return (
-    <AppLayout>
-      <Routes>
-        <Route path="/" element={<Navigate to="/control-tower" replace />} />
-        <Route path="/control-tower" element={<ControlTowerPage />} />
-        <Route path="/locations" element={<LocationsPage />} />
-        <Route path="/cargo" element={<CargoPage />} />
-        <Route path="/transport" element={<TransportPage />} />
-        <Route path="/inventory" element={<InventoryPage />} />
-        <Route path="/assets" element={<AssetsPage />} />
-        <Route path="/incidents" element={<IncidentsPage />} />
-        <Route path="*" element={<Navigate to="/control-tower" replace />} />
-      </Routes>
-    </AppLayout>
+    <Routes>
+      {/* ── Public Product Landing Page ────────────────────────────────────── */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/landing" element={<LandingPage />} />
+
+      {/* ── Operational Platform Modules (wrapped in AppLayout) ─────────────── */}
+      <Route
+        path="/control-tower"
+        element={
+          <AppLayout>
+            <ControlTowerPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/locations"
+        element={
+          <AppLayout>
+            <LocationsPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/cargo"
+        element={
+          <AppLayout>
+            <CargoPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/transport"
+        element={
+          <AppLayout>
+            <TransportPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/inventory"
+        element={
+          <AppLayout>
+            <InventoryPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/assets"
+        element={
+          <AppLayout>
+            <AssetsPage />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/incidents"
+        element={
+          <AppLayout>
+            <IncidentsPage />
+          </AppLayout>
+        }
+      />
+
+      {/* ── Fallback ───────────────────────────────────────────────────────── */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

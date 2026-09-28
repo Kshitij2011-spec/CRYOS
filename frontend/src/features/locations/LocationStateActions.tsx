@@ -18,8 +18,8 @@ export function LocationStateActions({ location }: Props) {
   const allowed = LOCATION_TRANSITIONS[location.status] ?? [];
   if (allowed.length === 0) {
     return (
-      <p className="text-slate-500 text-sm italic">
-        No state transitions available from <span className="font-mono">{location.status}</span>.
+      <p className="text-foreground-muted text-sm italic">
+        No state transitions available from <span className="font-semibold">{location.status}</span>.
       </p>
     );
   }
@@ -38,15 +38,15 @@ export function LocationStateActions({ location }: Props) {
   };
 
   const STYLE: Record<string, string> = {
-    AVAILABLE:    'border-emerald-700 text-emerald-300 hover:bg-emerald-900/30',
-    RESTRICTED:   'border-amber-700 text-amber-300 hover:bg-amber-900/30',
-    INACCESSIBLE: 'border-rose-700 text-rose-300 hover:bg-rose-900/30',
-    CLOSED:       'border-slate-600 text-slate-400 hover:bg-slate-800/60',
+    AVAILABLE:    'border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-900/30 dark:bg-emerald-950/40',
+    RESTRICTED:   'border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/30 dark:bg-amber-950/40',
+    INACCESSIBLE: 'border-rose-300 bg-rose-50 text-rose-800 hover:bg-rose-100 dark:border-rose-700 dark:text-rose-300 dark:hover:bg-rose-900/30 dark:bg-rose-950/40',
+    CLOSED:       'border-border bg-surface-muted text-foreground-secondary hover:bg-surface-elevated hover:text-foreground',
   };
 
   return (
     <div className="space-y-2">
-      <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Transition State</p>
+      <p className="eyebrow mb-2">Transition State</p>
       <div className="flex flex-wrap gap-2">
         {allowed.map((target: LocationStatus) => (
           <button
@@ -54,7 +54,7 @@ export function LocationStateActions({ location }: Props) {
             type="button"
             disabled={transition.isPending}
             onClick={() => handleClick(target)}
-            className={`px-3 py-1.5 rounded border text-xs font-medium transition-colors disabled:opacity-50 ${STYLE[target] ?? 'border-slate-600 text-slate-300 hover:bg-slate-800'}`}
+            className={`px-3 py-1.5 rounded border text-xs font-medium transition-colors disabled:opacity-50 ${STYLE[target] ?? 'border-border text-foreground-secondary hover:bg-surface-elevated'}`}
             aria-label={`Transition location to ${target}`}
           >
             → {target}

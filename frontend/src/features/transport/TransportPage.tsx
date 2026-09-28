@@ -9,6 +9,8 @@ import { LoadingSkeleton } from '../../components/shared/LoadingSkeleton';
 import { EmptyState } from '../../components/shared/EmptyState';
 import { ErrorDisplay } from '../../components/shared/ErrorDisplay';
 import { PageHeader } from '../../components/shared/PageHeader';
+import { AutoRefreshIndicator } from '../../components/shared/AutoRefreshIndicator';
+import { useLocationsLookup } from '../locations/hooks/useLocations';
 import type { TransportLeg } from '../../lib/types/api';
 
 const MODE_OPTIONS = [
@@ -35,10 +37,12 @@ export function TransportPage() {
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const { data, isLoading, error } = useTransportLegs({
+  const { data, dataUpdatedAt, isFetching, isLoading, error } = useTransportLegs({
     mode: modeFilter || undefined,
     status: statusFilter || undefined,
   });
+
+  const locationsLookup = useLocationsLookup();
 
   const legs = data ?? [];
 
@@ -69,7 +73,7 @@ export function TransportPage() {
       key: 'mode',
       header: 'Mode',
       render: (leg: TransportLeg) => (
-        <span className="font-mono text-xs text-cyan-300 font-medium px-2 py-0.5 rounded bg-cyan-950/50 border border-cyan-800/60">
+        <span className="text-xs text-cyan-700 bg-cyan-500/15 border border-cyan-400/50 dark:text-cyan-300 dark:bg-cyan-950/50 dark:border-cyan-800/60 font-semibold px-2 py-0.5 rounded">
           {leg.mode}
         </span>
       ),
@@ -82,19 +86,23 @@ export function TransportPage() {
     {
       key: 'route',
       header: 'Origin → Destination',
-      render: (leg: TransportLeg) => (
-        <span className="font-mono text-xs text-slate-400">
-          {leg.origin_location_id.slice(0, 8)}… → {leg.destination_location_id.slice(0, 8)}…
-        </span>
-      ),
+      render: (leg: TransportLeg) => {
+        const origin = locationsLookup.get(leg.origin_location_id)?.name ?? leg.origin_location_id.slice(0, 8);
+        const destination = locationsLookup.get(leg.destination_location_id)?.name ?? leg.destination_location_id.slice(0, 8);
+        return (
+          <span className="text-sm text-foreground-secondary">
+            {origin} → {destination}
+          </span>
+        );
+      },
     },
     {
       key: 'schedule',
       header: 'Est. Arrival',
       render: (leg: TransportLeg) => (
         <span
-          className={`font-mono text-xs ${
-            leg.status === 'DELAYED' ? 'text-amber-400 font-semibold' : 'text-slate-300'
+          className={`text-sm tabular-nums ${
+            leg.status === 'DELAYED' ? 'text-amber-600 dark:text-amber-400 font-semibold' : 'text-foreground-secondary'
           }`}
         >
           {leg.estimated_arrival_at
@@ -119,7 +127,7 @@ export function TransportPage() {
       key: 'capacity',
       header: 'Capacity',
       render: (leg: TransportLeg) => (
-        <span className="font-mono text-xs text-slate-400">
+        <span className="meta-text">
           {leg.capacity ? `${leg.capacity} ${leg.capacity_unit ?? ''}` : '—'}
         </span>
       ),
@@ -132,9 +140,12 @@ export function TransportPage() {
         title="Transport Legs"
         subtitle="Multimodal transit corridors, fleet movement, and operational delay tracking"
         actions={
-          <div className="flex items-center gap-2">
-            <Truck className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-            <span className="text-slate-400 text-xs">{filtered.length} legs</span>
+          <div className="flex items-center gap-3">
+            <AutoRefreshIndicator dataUpdatedAt={dataUpdatedAt} intervalSeconds={25} isFetching={isFetching} />
+            <div className="flex items-center gap-1.5">
+              <Truck className="w-4 h-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
+              <span className="text-foreground-muted text-xs">{filtered.length} legs</span>
+            </div>
           </div>
         }
       />
@@ -144,7 +155,7 @@ export function TransportPage() {
         {/* Search */}
         <div className="relative">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted"
             aria-hidden="true"
           />
           <input
@@ -153,7 +164,7 @@ export function TransportPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search transport legs"
-            className="pl-9 pr-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-600 w-64"
+            className="pl-9 pr-4 py-2 rounded-lg bg-surface border border-border text-foreground text-sm placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent w-64 shadow-sm"
           />
         </div>
 
@@ -163,7 +174,7 @@ export function TransportPage() {
             value={modeFilter}
             onChange={(e) => setModeFilter(e.target.value)}
             aria-label="Filter by transport mode"
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium focus:outline-none focus:border-cyan-600"
+            className="px-3 py-2 rounded-lg bg-surface border border-border text-foreground text-xs font-medium focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent shadow-sm"
           >
             {MODE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -181,10 +192,10 @@ export function TransportPage() {
               type="button"
               onClick={() => setStatusFilter(f.value)}
               aria-pressed={statusFilter === f.value}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border shadow-sm ${
                 statusFilter === f.value
-                  ? 'bg-cyan-900/60 border-cyan-700 text-cyan-300'
-                  : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200'
+                  ? 'bg-cyan-500/15 border-cyan-400/50 text-cyan-700 dark:bg-cyan-900/60 dark:border-cyan-700 dark:text-cyan-300'
+                  : 'bg-surface border-border text-foreground-muted hover:text-foreground hover:bg-surface-elevated'
               }`}
             >
               {f.label}
@@ -194,7 +205,7 @@ export function TransportPage() {
       </div>
 
       {/* Table Container */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+      <div className="rounded-xl border border-border bg-surface overflow-hidden shadow-sm">
         {isLoading && (
           <div className="p-6">
             <LoadingSkeleton lines={8} />
@@ -209,7 +220,7 @@ export function TransportPage() {
           <EmptyState
             title="No transport legs found"
             message="No transport segments match the selected search or filter criteria."
-            icon={<AlertCircle className="w-12 h-12 text-slate-500" />}
+            icon={<AlertCircle className="w-12 h-12 text-foreground-muted" />}
           />
         )}
         {!isLoading && !error && filtered.length > 0 && (

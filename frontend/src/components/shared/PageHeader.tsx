@@ -2,18 +2,28 @@ interface Props {
   title: string;
   subtitle?: string;
   actions?: React.ReactNode;
+  eyebrow?: string;
 }
 
-export function PageHeader({ title, subtitle, actions }: Props) {
+export function PageHeader({ title, subtitle, actions, eyebrow }: Props) {
   return (
-    <div className="flex items-start justify-between mb-6">
+    <div className="flex items-start justify-between mb-6 gap-4">
       <div>
-        <h1 className="text-xl font-semibold text-slate-100">{title}</h1>
+        {eyebrow && (
+          <p className="eyebrow mb-1.5">
+            {eyebrow}
+          </p>
+        )}
+        <h1 className="page-title">{title}</h1>
         {subtitle && (
-          <p className="text-slate-400 text-sm mt-0.5">{subtitle}</p>
+          <p className="body-text-sm mt-1">{subtitle}</p>
         )}
       </div>
-      {actions && <div className="flex items-center gap-2">{actions}</div>}
+      {actions && (
+        <div className="flex items-center gap-2 shrink-0">
+          {actions}
+        </div>
+      )}
     </div>
   );
 }

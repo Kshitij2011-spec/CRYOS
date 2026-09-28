@@ -9,6 +9,7 @@ import { LoadingSkeleton } from '../../components/shared/LoadingSkeleton';
 import { EmptyState } from '../../components/shared/EmptyState';
 import { ErrorDisplay } from '../../components/shared/ErrorDisplay';
 import { PageHeader } from '../../components/shared/PageHeader';
+import { AutoRefreshIndicator } from '../../components/shared/AutoRefreshIndicator';
 import type { Location, LocationStatus } from '../../lib/types/api';
 
 const STATUS_FILTERS: { label: string; value: string }[] = [
@@ -24,7 +25,13 @@ export function LocationsPage() {
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const { data, isLoading, error } = useLocations({ status: statusFilter || undefined });
+  const { data, dataUpdatedAt, isFetching, isLoading, error } = useLocations({ status: statusFilter || undefined });
+
+  // Map for resolving parent location IDs to human-readable names
+  const locationMap = (data ?? []).reduce<Record<string, Location>>((acc, l) => {
+    acc[l.id] = l;
+    return acc;
+  }, {});
 
   // Client-side name search (API doesn't support search param)
   const filtered = (data ?? []).filter((loc) =>
@@ -46,14 +53,14 @@ export function LocationsPage() {
       key: 'name',
       header: 'Name',
       render: (loc: Location) => (
-        <span className="font-medium text-slate-200">{loc.name}</span>
+        <span className="font-medium text-foreground">{loc.name}</span>
       ),
     },
     {
       key: 'type',
       header: 'Type',
       render: (loc: Location) => (
-        <span className="text-slate-400 text-xs font-mono">{loc.type}</span>
+        <span className="text-foreground-secondary text-sm">{loc.type}</span>
       ),
     },
     {
@@ -64,12 +71,17 @@ export function LocationsPage() {
     {
       key: 'hierarchy',
       header: 'Parent',
-      render: (loc: Location) =>
-        loc.parent_location_id ? (
-          <span className="text-slate-500 text-xs font-mono truncate">…</span>
-        ) : (
-          <span className="text-slate-600 text-xs italic">root</span>
-        ),
+      render: (loc: Location) => {
+        if (!loc.parent_location_id) {
+          return <span className="text-foreground-muted text-xs italic">root</span>;
+        }
+        const parent = locationMap[loc.parent_location_id];
+        return (
+          <span className="text-foreground-secondary text-sm">
+            {parent ? `${parent.name} (${parent.code})` : `${loc.parent_location_id.slice(0, 8)}…`}
+          </span>
+        );
+      },
     },
   ];
 
@@ -79,9 +91,12 @@ export function LocationsPage() {
         title="Locations"
         subtitle="Operational facilities, field depots, and logistics nodes"
         actions={
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-slate-500" aria-hidden="true" />
-            <span className="text-slate-400 text-xs">{filtered.length} locations</span>
+          <div className="flex items-center gap-3">
+            <AutoRefreshIndicator dataUpdatedAt={dataUpdatedAt} intervalSeconds={25} isFetching={isFetching} />
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-4 h-4 text-foreground-muted" aria-hidden="true" />
+              <span className="text-foreground-secondary text-xs">{filtered.length} locations</span>
+            </div>
           </div>
         }
       />
@@ -91,7 +106,7 @@ export function LocationsPage() {
         {/* Search */}
         <div className="relative">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted"
             aria-hidden="true"
           />
           <input
@@ -100,7 +115,7 @@ export function LocationsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search locations"
-            className="pl-9 pr-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-600 w-60"
+            className="pl-9 pr-4 py-2 rounded-lg bg-surface-elevated border border-border text-foreground text-sm placeholder:text-foreground-muted focus:outline-none focus:border-cyan-600 w-60 transition-colors"
           />
         </div>
 
@@ -114,8 +129,8 @@ export function LocationsPage() {
               aria-pressed={statusFilter === f.value}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                 statusFilter === f.value
-                  ? 'bg-cyan-900/60 border-cyan-700 text-cyan-300'
-                  : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200'
+                  ? 'bg-cyan-50 border-cyan-300 text-cyan-800 dark:bg-cyan-900/60 dark:border-cyan-700 dark:text-cyan-300'
+                  : 'bg-surface-elevated border-border text-foreground-secondary hover:text-foreground hover:bg-surface-muted'
               }`}
             >
               {f.label}
@@ -125,7 +140,7 @@ export function LocationsPage() {
       </div>
 
       {/* Content */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+      <div className="rounded-xl border border-border bg-surface overflow-hidden">
         {isLoading && <div className="p-6"><LoadingSkeleton lines={8} /></div>}
         {error && <div className="p-6"><ErrorDisplay error={error} title="Failed to load locations" /></div>}
         {!isLoading && !error && filtered.length === 0 && (

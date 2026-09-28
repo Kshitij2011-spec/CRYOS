@@ -23,5 +23,7 @@ export function useInventoryItems(filters?: InventoryItemFilters) {
         unit_of_measure: (raw.unit as string) ?? (raw.unit_of_measure as string) ?? 'UNIT',
       })) as unknown as InventoryItem[];
     },
+    refetchInterval: 25_000,
+    refetchIntervalInBackground: false,
   });
 }

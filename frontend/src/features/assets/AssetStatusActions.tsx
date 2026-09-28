@@ -89,8 +89,8 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
   };
 
   return (
-    <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-4">
+    <div className="p-4 rounded-lg bg-surface border border-border">
+      <div className="flex items-center justify-between border-b border-border pb-2 mb-4">
         <div className="flex gap-2">
           <button
             type="button"
@@ -98,10 +98,10 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
               setActiveAction('TRANSITION');
               setErrorMessage(null);
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors font-medium border ${
               activeAction === 'TRANSITION'
-                ? 'bg-cyan-900/60 text-cyan-200 border border-cyan-700'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-cyan-50 text-cyan-800 border-cyan-300 dark:bg-cyan-900/60 dark:text-cyan-200 dark:border-cyan-700'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-elevated border-transparent'
             }`}
           >
             <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
@@ -113,10 +113,10 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
               setActiveAction('RELOCATE');
               setErrorMessage(null);
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors font-medium border ${
               activeAction === 'RELOCATE'
-                ? 'bg-cyan-900/60 text-cyan-200 border border-cyan-700'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-cyan-50 text-cyan-800 border-cyan-300 dark:bg-cyan-900/60 dark:text-cyan-200 dark:border-cyan-700'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-elevated border-transparent'
             }`}
           >
             <Truck className="w-3.5 h-3.5" aria-hidden="true" />
@@ -132,20 +132,20 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
       )}
 
       {isRetired ? (
-        <div className="p-3 rounded bg-zinc-900 border border-zinc-700 text-zinc-400">
-          Status <span className="font-bold text-zinc-300">RETIRED</span> is terminal. No state transitions or movements are permitted.
+        <div className="p-3 rounded bg-surface-muted border border-border text-foreground-muted">
+          Status <span className="font-bold text-foreground">RETIRED</span> is terminal. No state transitions or movements are permitted.
         </div>
       ) : activeAction === 'TRANSITION' ? (
         <form onSubmit={handleTransitionSubmit} className="space-y-3">
           <div>
-            <label htmlFor="asset-target-status" className="block text-slate-400 mb-1">
-              Target Status <span className="text-rose-400">*</span>
+            <label htmlFor="asset-target-status" className="block text-foreground-secondary mb-1">
+              Target Status <span className="text-rose-500">*</span>
             </label>
             <select
               id="asset-target-status"
               value={targetStatus}
               onChange={(e) => setTargetStatus(e.target.value as AssetStatus)}
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               required
             >
               <option value="">Select next status...</option>
@@ -158,7 +158,7 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
           </div>
 
           <div>
-            <label htmlFor="transition-reason-input" className="block text-slate-400 mb-1">
+            <label htmlFor="transition-reason-input" className="block text-foreground-secondary mb-1">
               Operational Justification
             </label>
             <input
@@ -167,14 +167,14 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
               value={transitionReason}
               onChange={(e) => setTransitionReason(e.target.value)}
               placeholder="e.g. Cleared after pre-season inspection"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting || validTransitions.length === 0}
-            className="w-full py-2 px-4 rounded bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
+            className="w-full py-2 px-4 rounded bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
           >
             {isSubmitting ? 'Transitioning...' : 'Transition Status'}
           </button>
@@ -182,8 +182,8 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
       ) : (
         <form onSubmit={handleMoveSubmit} className="space-y-3">
           <div>
-            <label htmlFor="dest-location" className="block text-slate-400 mb-1">
-              Destination Location ID <span className="text-rose-400">*</span>
+            <label htmlFor="dest-location" className="block text-foreground-secondary mb-1">
+              Destination Location ID <span className="text-rose-500">*</span>
             </label>
             <input
               id="dest-location"
@@ -191,13 +191,13 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
               value={destinationLocationId}
               onChange={(e) => setDestinationLocationId(e.target.value)}
               placeholder="UUID of destination facility / sector"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="move-reason-input" className="block text-slate-400 mb-1">
+            <label htmlFor="move-reason-input" className="block text-foreground-secondary mb-1">
               Movement Reason
             </label>
             <input
@@ -206,14 +206,14 @@ export function AssetStatusActions({ asset, onSuccess }: Props) {
               value={moveReason}
               onChange={(e) => setMoveReason(e.target.value)}
               placeholder="e.g. Staged at airfield hangar for summer sortie"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-2 px-4 rounded bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
+            className="w-full py-2 px-4 rounded bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
           >
             {isSubmitting ? 'Relocating...' : 'Execute Relocation'}
           </button>

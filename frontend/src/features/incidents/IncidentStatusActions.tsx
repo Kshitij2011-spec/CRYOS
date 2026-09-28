@@ -86,32 +86,32 @@ export function IncidentStatusActions({ incident, onSuccess }: Props) {
 
   if (incident.status === 'CLOSED') {
     return (
-      <div className="p-4 rounded-lg bg-zinc-900 border border-zinc-700 text-zinc-400 font-mono text-xs">
-        Incident is in terminal state <span className="font-bold text-zinc-200">CLOSED</span>. No further lifecycle actions or transitions are permitted.
+      <div className="p-4 rounded-lg bg-surface-muted border border-border text-foreground-muted text-sm">
+        Incident is in terminal state <span className="font-bold text-foreground">CLOSED</span>. No further lifecycle actions or transitions are permitted.
       </div>
     );
   }
 
   return (
-    <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-3 font-mono text-xs">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-        <span className="text-slate-400 uppercase tracking-wider text-[11px]">
+    <div className="p-4 rounded-lg bg-surface border border-border space-y-3">
+      <div className="flex items-center justify-between border-b border-border pb-2">
+        <span className="eyebrow">
           Lifecycle Transitions
         </span>
-        <span className="text-cyan-400 font-semibold">Current: {incident.status}</span>
+        <span className="text-cyan-600 dark:text-cyan-400 font-semibold">Current: {incident.status}</span>
       </div>
 
       {isLocalQueued && (
         <div
           data-testid="local-queued-status-banner"
-          className="p-2.5 rounded bg-amber-950/70 border border-amber-500/80 text-amber-300 font-mono text-xs flex items-center justify-between gap-2"
+          className="p-2.5 rounded bg-amber-50 border border-amber-400 text-amber-800 dark:bg-amber-950/70 dark:border-amber-500/80 dark:text-amber-300 text-xs flex items-center justify-between gap-2"
         >
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
             <span className="font-semibold">LOCAL_QUEUED — FIELD BUFFERED [SYNTHETIC/DEMO]</span>
           </div>
           {queuedOp && (
-            <span className="text-[10px] text-amber-400/80 font-mono">
+            <span className="entity-id text-amber-700 dark:text-amber-400/80">
               OP: {queuedOp.client_operation_id.slice(0, 8)}...
             </span>
           )}
@@ -128,7 +128,7 @@ export function IncidentStatusActions({ incident, onSuccess }: Props) {
             type="button"
             onClick={handleAcknowledge}
             disabled={isSubmitting}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-amber-700 hover:bg-amber-600 disabled:opacity-50 text-white font-medium transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-medium transition-colors"
           >
             <Shield className="w-3.5 h-3.5" aria-hidden="true" />
             Acknowledge
@@ -140,7 +140,7 @@ export function IncidentStatusActions({ incident, onSuccess }: Props) {
             type="button"
             onClick={handleMitigate}
             disabled={isSubmitting}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-indigo-700 hover:bg-indigo-600 disabled:opacity-50 text-white font-medium transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium transition-colors"
           >
             <Play className="w-3.5 h-3.5" aria-hidden="true" />
             Start Mitigation
@@ -152,7 +152,7 @@ export function IncidentStatusActions({ incident, onSuccess }: Props) {
             type="button"
             onClick={handleResolve}
             disabled={isSubmitting}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white font-medium transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-medium transition-colors"
           >
             <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
             Resolve Incident
@@ -164,7 +164,7 @@ export function IncidentStatusActions({ incident, onSuccess }: Props) {
             type="button"
             onClick={handleClose}
             disabled={isSubmitting}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 disabled:opacity-50 text-slate-200 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-surface-elevated hover:bg-surface-muted border border-border disabled:opacity-50 text-foreground transition-colors font-medium"
           >
             <Ban className="w-3.5 h-3.5" aria-hidden="true" />
             Close Incident

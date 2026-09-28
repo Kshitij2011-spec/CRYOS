@@ -23,12 +23,12 @@ export function LocationHierarchyTree({ locationId, onSelect }: Props) {
       {/* Ancestors */}
       {data.ancestors.length > 0 && (
         <div>
-          <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Ancestors</p>
+          <p className="eyebrow mb-2">Ancestors</p>
           <div className="space-y-1">
             {data.ancestors.map((ancestor, i) => (
               <div
                 key={ancestor.id}
-                className="flex items-center gap-2 text-sm text-slate-400"
+                className="flex items-center gap-2 text-sm text-foreground-secondary"
                 style={{ paddingLeft: `${i * 12}px` }}
               >
                 <ChevronRight className="w-3 h-3 shrink-0" aria-hidden="true" />
@@ -36,7 +36,7 @@ export function LocationHierarchyTree({ locationId, onSelect }: Props) {
                 <button
                   type="button"
                   onClick={() => onSelect?.(ancestor)}
-                  className="hover:text-slate-200 transition-colors text-left"
+                  className="hover:text-foreground transition-colors text-left"
                 >
                   {ancestor.name}
                 </button>
@@ -49,28 +49,28 @@ export function LocationHierarchyTree({ locationId, onSelect }: Props) {
       )}
 
       {/* Current */}
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800/60 border border-slate-700">
-        <MapPin className="w-4 h-4 text-cyan-400 shrink-0" aria-hidden="true" />
-        <span className="text-slate-200 font-medium text-sm">{data.location.name}</span>
+      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-elevated border border-border">
+        <MapPin className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0" aria-hidden="true" />
+        <span className="text-foreground font-medium text-sm">{data.location.name}</span>
         <EntityCode code={data.location.code} />
         <LocationStatusBadge status={data.location.status} />
-        <span className="ml-auto text-xs text-slate-500">{data.location.type}</span>
+        <span className="ml-auto text-xs text-foreground-muted">{data.location.type}</span>
       </div>
 
       {/* Children */}
       {data.children.length > 0 && (
         <div>
-          <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">
+          <p className="eyebrow mb-2">
             Sub-locations ({data.children.length})
           </p>
           <div className="space-y-1">
             {data.children.map((child) => (
-              <div key={child.id} className="flex items-center gap-2 text-sm text-slate-400 pl-4">
+              <div key={child.id} className="flex items-center gap-2 text-sm text-foreground-secondary pl-4">
                 <ChevronRight className="w-3 h-3 shrink-0" aria-hidden="true" />
                 <button
                   type="button"
                   onClick={() => onSelect?.(child)}
-                  className="hover:text-slate-200 transition-colors text-left"
+                  className="hover:text-foreground transition-colors text-left"
                 >
                   {child.name}
                 </button>
@@ -83,7 +83,7 @@ export function LocationHierarchyTree({ locationId, onSelect }: Props) {
       )}
 
       {data.ancestors.length === 0 && data.children.length === 0 && (
-        <p className="text-slate-500 text-sm">No hierarchy relationships.</p>
+        <p className="text-foreground-muted text-sm">No hierarchy relationships.</p>
       )}
     </div>
   );

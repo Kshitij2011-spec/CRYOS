@@ -166,8 +166,8 @@ export function MaintenanceWorkflow({
   };
 
   return (
-    <div className="p-4 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-4">
+    <div className="p-4 rounded-lg bg-surface border border-border">
+      <div className="flex items-center justify-between border-b border-border pb-2 mb-4">
         <div className="flex gap-2">
           <button
             type="button"
@@ -176,10 +176,10 @@ export function MaintenanceWorkflow({
               onClearSelected?.();
               setErrorMessage(null);
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors font-medium border ${
               mode === 'SCHEDULE' && !selectedRecord
-                ? 'bg-cyan-900/60 text-cyan-200 border border-cyan-700'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-cyan-50 text-cyan-800 border-cyan-300 dark:bg-cyan-900/60 dark:text-cyan-200 dark:border-cyan-700'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-elevated border-transparent'
             }`}
           >
             <Plus className="w-3.5 h-3.5" aria-hidden="true" />
@@ -192,10 +192,10 @@ export function MaintenanceWorkflow({
                 setUserMode('ACTION');
                 setErrorMessage(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors font-medium border ${
                 mode === 'ACTION'
-                  ? 'bg-cyan-900/60 text-cyan-200 border border-cyan-700'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  ? 'bg-cyan-50 text-cyan-800 border-cyan-300 dark:bg-cyan-900/60 dark:text-cyan-200 dark:border-cyan-700'
+                  : 'text-foreground-secondary hover:text-foreground hover:bg-surface-elevated border-transparent'
               }`}
             >
               Order {selectedRecord.id.slice(0, 8)} ({selectedRecord.status})
@@ -206,7 +206,7 @@ export function MaintenanceWorkflow({
           <button
             type="button"
             onClick={onClearSelected}
-            className="text-slate-500 hover:text-slate-300"
+            className="text-foreground-muted hover:text-foreground"
           >
             Clear Selected
           </button>
@@ -221,18 +221,18 @@ export function MaintenanceWorkflow({
 
       {selectedRecord && mode === 'ACTION' ? (
         <div className="space-y-4">
-          <div className="p-3 rounded bg-slate-950 border border-slate-800">
+          <div className="p-3 rounded bg-surface-elevated border border-border">
             <div className="flex justify-between items-center mb-1">
-              <span className="font-semibold text-slate-200">{selectedRecord.maintenance_type}</span>
-              <span className="text-cyan-400 font-bold">{selectedRecord.status}</span>
+              <span className="font-semibold text-foreground">{selectedRecord.maintenance_type}</span>
+              <span className="text-cyan-600 dark:text-cyan-400 font-bold">{selectedRecord.status}</span>
             </div>
-            <p className="text-slate-400">{selectedRecord.description}</p>
+            <p className="text-foreground-secondary">{selectedRecord.description}</p>
           </div>
 
           {selectedRecord.status === 'SCHEDULED' || selectedRecord.status === 'OVERDUE' ? (
             <div className="space-y-3">
               <div>
-                <label htmlFor="start-notes" className="block text-slate-400 mb-1">
+                <label htmlFor="start-notes" className="block text-foreground-secondary mb-1">
                   Start Notes
                 </label>
                 <input
@@ -241,7 +241,7 @@ export function MaintenanceWorkflow({
                   value={startNotes}
                   onChange={(e) => setStartNotes(e.target.value)}
                   placeholder="Technician check-in notes"
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
                 />
               </div>
               <div className="flex gap-2">
@@ -249,7 +249,7 @@ export function MaintenanceWorkflow({
                   type="button"
                   onClick={() => handleStart(selectedRecord)}
                   disabled={isSubmitting}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 text-white font-medium"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-medium transition-colors"
                 >
                   <Play className="w-3.5 h-3.5" aria-hidden="true" />
                   Start Work (IN_PROGRESS)
@@ -258,7 +258,7 @@ export function MaintenanceWorkflow({
                   type="button"
                   onClick={() => handleCancel(selectedRecord)}
                   disabled={isSubmitting}
-                  className="py-2 px-3 rounded bg-rose-900/60 hover:bg-rose-800 border border-rose-700 text-rose-200 font-medium"
+                  className="py-2 px-3 rounded bg-rose-50 text-rose-800 border border-rose-300 hover:bg-rose-100 dark:bg-rose-900/60 dark:hover:bg-rose-800 dark:border-rose-700 dark:text-rose-200 font-medium transition-colors"
                 >
                   <Ban className="w-3.5 h-3.5" aria-hidden="true" />
                   Cancel Order
@@ -268,8 +268,8 @@ export function MaintenanceWorkflow({
           ) : selectedRecord.status === 'IN_PROGRESS' ? (
             <div className="space-y-3">
               <div>
-                <label htmlFor="findings-input" className="block text-slate-400 mb-1">
-                  Inspection Findings <span className="text-rose-400">*</span>
+                <label htmlFor="findings-input" className="block text-foreground-secondary mb-1">
+                  Inspection Findings <span className="text-rose-500">*</span>
                 </label>
                 <input
                   id="findings-input"
@@ -277,14 +277,14 @@ export function MaintenanceWorkflow({
                   value={findings}
                   onChange={(e) => setFindings(e.target.value)}
                   placeholder="Observed wear, diagnostic outputs, or test results"
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="corrective-action-input" className="block text-slate-400 mb-1">
-                  Corrective Action Taken <span className="text-rose-400">*</span>
+                <label htmlFor="corrective-action-input" className="block text-foreground-secondary mb-1">
+                  Corrective Action Taken <span className="text-rose-500">*</span>
                 </label>
                 <input
                   id="corrective-action-input"
@@ -292,20 +292,20 @@ export function MaintenanceWorkflow({
                   value={correctiveAction}
                   onChange={(e) => setCorrectiveAction(e.target.value)}
                   placeholder="Repairs made, parts replaced, calibration performed"
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="target-asset-status-input" className="block text-slate-400 mb-1">
+                <label htmlFor="target-asset-status-input" className="block text-foreground-secondary mb-1">
                   Resulting Asset Status
                 </label>
                 <select
                   id="target-asset-status-input"
                   value={targetAssetStatus}
                   onChange={(e) => setTargetAssetStatus(e.target.value as AssetStatus)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
                 >
                   <option value="AVAILABLE">AVAILABLE (Operational)</option>
                   <option value="QUARANTINED">QUARANTINED (Hold for review)</option>
@@ -318,7 +318,7 @@ export function MaintenanceWorkflow({
                   type="button"
                   onClick={() => handleComplete(selectedRecord)}
                   disabled={isSubmitting}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white font-medium"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-medium transition-colors"
                 >
                   <Check className="w-3.5 h-3.5" aria-hidden="true" />
                   Complete Maintenance
@@ -327,7 +327,7 @@ export function MaintenanceWorkflow({
                   type="button"
                   onClick={() => handleCancel(selectedRecord)}
                   disabled={isSubmitting}
-                  className="py-2 px-3 rounded bg-rose-900/60 hover:bg-rose-800 border border-rose-700 text-rose-200 font-medium"
+                  className="py-2 px-3 rounded bg-rose-50 text-rose-800 border border-rose-300 hover:bg-rose-100 dark:bg-rose-900/60 dark:hover:bg-rose-800 dark:border-rose-700 dark:text-rose-200 font-medium transition-colors"
                 >
                   <Ban className="w-3.5 h-3.5" aria-hidden="true" />
                   Cancel
@@ -335,7 +335,7 @@ export function MaintenanceWorkflow({
               </div>
             </div>
           ) : (
-            <div className="p-3 rounded bg-slate-950 text-slate-400 text-center">
+            <div className="p-3 rounded bg-surface-muted text-foreground-muted text-center border border-border">
               Order is in terminal state ({selectedRecord.status}). No further actions available.
             </div>
           )}
@@ -344,14 +344,14 @@ export function MaintenanceWorkflow({
         <form onSubmit={handleScheduleSubmit} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="maint-type" className="block text-slate-400 mb-1">
+              <label htmlFor="maint-type" className="block text-foreground-secondary mb-1">
                 Maintenance Type
               </label>
               <select
                 id="maint-type"
                 value={maintenanceType}
                 onChange={(e) => setMaintenanceType(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               >
                 <option value="PREVENTIVE">PREVENTIVE</option>
                 <option value="CORRECTIVE">CORRECTIVE</option>
@@ -362,7 +362,7 @@ export function MaintenanceWorkflow({
             </div>
 
             <div>
-              <label htmlFor="maint-priority" className="block text-slate-400 mb-1">
+              <label htmlFor="maint-priority" className="block text-foreground-secondary mb-1">
                 Priority (1 = Highest)
               </label>
               <input
@@ -372,14 +372,14 @@ export function MaintenanceWorkflow({
                 max="5"
                 value={priority}
                 onChange={(e) => setPriority(parseInt(e.target.value, 10))}
-                className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="maint-desc" className="block text-slate-400 mb-1">
-              Description / Work Scope <span className="text-rose-400">*</span>
+            <label htmlFor="maint-desc" className="block text-foreground-secondary mb-1">
+              Description / Work Scope <span className="text-rose-500">*</span>
             </label>
             <input
               id="maint-desc"
@@ -387,28 +387,28 @@ export function MaintenanceWorkflow({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g. 500-hour hydraulic pump check and fluid analysis"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               required
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="maint-start" className="block text-slate-400 mb-1">
-                Scheduled Start <span className="text-rose-400">*</span>
+              <label htmlFor="maint-start" className="block text-foreground-secondary mb-1">
+                Scheduled Start <span className="text-rose-500">*</span>
               </label>
               <input
                 id="maint-start"
                 type="datetime-local"
                 value={scheduledStart}
                 onChange={(e) => setScheduledStart(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="maint-duration" className="block text-slate-400 mb-1">
+              <label htmlFor="maint-duration" className="block text-foreground-secondary mb-1">
                 Est. Duration (hrs)
               </label>
               <input
@@ -418,13 +418,13 @@ export function MaintenanceWorkflow({
                 step="0.5"
                 value={durationHours}
                 onChange={(e) => setDurationHours(parseFloat(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="maint-tech" className="block text-slate-400 mb-1">
+            <label htmlFor="maint-tech" className="block text-foreground-secondary mb-1">
               Technician Name / ID
             </label>
             <input
@@ -433,14 +433,14 @@ export function MaintenanceWorkflow({
               value={technicianName}
               onChange={(e) => setTechnicianName(e.target.value)}
               placeholder="e.g. Tech Specialist Sharma"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-2 px-4 rounded bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 text-white font-medium transition-colors"
+            className="w-full py-2 px-4 rounded bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-medium transition-colors"
           >
             {isSubmitting ? 'Scheduling...' : 'Schedule Maintenance Order'}
           </button>

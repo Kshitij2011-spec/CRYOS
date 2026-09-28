@@ -143,19 +143,19 @@ export function ApprovalModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="approval-modal-title"
     >
-      <div className="relative w-full max-w-3xl my-8 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-3xl my-8 bg-surface border border-border rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface-elevated">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="w-5 h-5 text-cyan-400" aria-hidden="true" />
+            <ShieldCheck className="w-5 h-5 text-accent" aria-hidden="true" />
             <h2
               id="approval-modal-title"
-              className="text-lg font-semibold text-slate-100 tracking-wide"
+              className="text-lg font-semibold text-foreground tracking-wide"
             >
               Operational Decision Review
             </h2>
@@ -164,14 +164,14 @@ export function ApprovalModal({
             type="button"
             onClick={onClose}
             aria-label="Close review modal"
-            className="p-1 text-slate-400 hover:text-slate-200 rounded hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="p-1 text-foreground-muted hover:text-foreground rounded hover:bg-surface-muted focus:outline-none focus:ring-2 focus:ring-accent"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 text-slate-300">
+        <div className="p-6 overflow-y-auto space-y-6 flex-1 text-foreground-secondary">
           {/* Loading */}
           {isLoading && (
             <div aria-busy="true" className="space-y-4">
@@ -192,9 +192,9 @@ export function ApprovalModal({
           {!isLoading && !error && recommendation && (
             <>
               {/* Title & Metadata Header */}
-              <div className="space-y-2 border-b border-slate-800 pb-4">
+              <div className="space-y-2 border-b border-border pb-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-xl font-bold text-slate-100">
+                  <h3 className="text-xl font-bold text-foreground">
                     {recommendation.title}
                   </h3>
                   <div className="flex items-center gap-2">
@@ -204,11 +204,11 @@ export function ApprovalModal({
                   </div>
                 </div>
                 {recommendation.summary && (
-                  <p className="text-sm text-slate-300 leading-relaxed">
+                  <p className="text-sm text-foreground-secondary leading-relaxed">
                     {recommendation.summary}
                   </p>
                 )}
-                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-400 pt-1">
+                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-foreground-muted pt-1">
                   <span>REC ID: {recommendation.id}</span>
                   <span>REPLAN: {recommendation.replan_id}</span>
                   <span>
@@ -220,10 +220,10 @@ export function ApprovalModal({
               {/* Operational Rationale */}
               {recommendation.rationale && recommendation.rationale.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
+                  <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-foreground-muted">
                     Operational Rationale
                   </h4>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-slate-200 bg-slate-950/40 p-3 rounded border border-slate-800">
+                  <ul className="list-disc list-inside space-y-1 text-sm text-foreground bg-surface-muted p-3 rounded border border-border">
                     {recommendation.rationale.map((point, idx) => (
                       <li key={idx} className="leading-relaxed">
                         {point}
@@ -236,21 +236,21 @@ export function ApprovalModal({
               {/* Proposed Changes */}
               {recommendation.proposed_changes && recommendation.proposed_changes.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
+                  <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-foreground-muted">
                     Proposed Domain Changes ({recommendation.proposed_changes.length})
                   </h4>
                   <div className="space-y-2">
                     {recommendation.proposed_changes.map((change, idx) => (
                       <div
                         key={idx}
-                        className="bg-slate-950/40 border border-slate-800 rounded p-3 text-xs font-mono text-slate-300 space-y-1"
+                        className="bg-surface-muted border border-border rounded p-3 text-xs font-mono text-foreground-secondary space-y-1"
                       >
                         {typeof change === 'object' && change !== null ? (
                           Object.entries(change as Record<string, unknown>).map(
                             ([k, v]) => (
                               <div key={k} className="flex gap-2">
-                                <span className="text-cyan-400 font-semibold">{k}:</span>
-                                <span className="text-slate-200">{String(v)}</span>
+                                <span className="text-accent font-semibold">{k}:</span>
+                                <span className="text-foreground">{String(v)}</span>
                               </div>
                             ),
                           )
@@ -267,16 +267,16 @@ export function ApprovalModal({
               {recommendation.expected_impact &&
                 Object.keys(recommendation.expected_impact).length > 0 && (
                   <div className="space-y-2">
-                    <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
+                    <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-foreground-muted">
                       Expected Impact
                     </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-950/40 border border-slate-800 rounded p-3 text-xs font-mono">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-surface-muted border border-border rounded p-3 text-xs font-mono">
                       {Object.entries(recommendation.expected_impact).map(([k, v]) => (
                         <div key={k} className="space-y-0.5">
-                          <span className="text-slate-400 font-medium capitalize">
+                          <span className="text-foreground-muted font-medium capitalize">
                             {k.replace(/_/g, ' ')}:
                           </span>{' '}
-                          <span className="text-slate-200 font-semibold">
+                          <span className="text-foreground font-semibold">
                             {String(v)}
                           </span>
                         </div>
@@ -289,7 +289,7 @@ export function ApprovalModal({
               {recommendation.violated_constraints &&
                 recommendation.violated_constraints.length > 0 && (
                   <div className="space-y-2">
-                    <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-amber-400">
+                    <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-amber-500 dark:text-amber-400">
                       Addressed Constraint Violations (
                       {recommendation.violated_constraints.length})
                     </h4>
@@ -297,9 +297,9 @@ export function ApprovalModal({
                       {recommendation.violated_constraints.map((c, idx) => (
                         <div
                           key={idx}
-                          className="bg-amber-950/20 border border-amber-900/50 rounded p-2.5 text-xs text-amber-200 flex items-start gap-2"
+                          className="bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/20 dark:border-amber-900/50 dark:text-amber-200 rounded p-2.5 text-xs flex items-start gap-2"
                         >
-                          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                          <AlertTriangle className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
                           <div>
                             {typeof c === 'object' && c !== null ? (
                               <span>
@@ -320,20 +320,20 @@ export function ApprovalModal({
                 )}
 
               {/* ─── Governance State & Action Lifecycle ─── */}
-              <div className="pt-4 border-t border-slate-800 space-y-4">
+              <div className="pt-4 border-t border-border space-y-4">
                 {/* 1. Terminal State: APPLIED */}
                 {isApplied && (
-                  <div className="bg-emerald-950/40 border border-emerald-700/60 rounded-lg p-4 space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-300 font-semibold">
-                      <CheckCircle className="w-5 h-5 text-emerald-400" />
+                  <div className="bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-700/60 dark:text-emerald-300 rounded-lg p-4 space-y-2">
+                    <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-semibold">
+                      <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                       <span>RECOMMENDATION APPLIED</span>
                     </div>
-                    <p className="text-xs text-slate-300">
+                    <p className="text-xs text-foreground-secondary">
                       {applyResult?.message ??
                         'Operational changes have been successfully enacted across the expedition domain.'}
                     </p>
                     {applyResult?.applied_changes && (
-                      <p className="text-xs font-mono text-emerald-400">
+                      <p className="text-xs font-mono text-emerald-700 dark:text-emerald-400">
                         Mutations executed: {applyResult.applied_changes.length} change(s).
                       </p>
                     )}
@@ -342,12 +342,12 @@ export function ApprovalModal({
 
                 {/* 2. Terminal State: REJECTED */}
                 {!isApplied && isRejected && (
-                  <div className="bg-slate-800/60 border border-slate-700 rounded-lg p-4 space-y-2">
-                    <div className="flex items-center gap-2 text-slate-300 font-semibold">
-                      <XCircle className="w-5 h-5 text-rose-400" />
+                  <div className="bg-surface-muted border border-border rounded-lg p-4 space-y-2">
+                    <div className="flex items-center gap-2 text-foreground font-semibold">
+                      <XCircle className="w-5 h-5 text-rose-500" />
                       <span>RECOMMENDATION REJECTED</span>
                     </div>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-foreground-muted">
                       This operational recommendation was rejected by the operator and will not be applied.
                     </p>
                   </div>
@@ -356,23 +356,23 @@ export function ApprovalModal({
                 {/* 3. Intermediate State: APPROVED — READY TO APPLY */}
                 {!isApplied && !isRejected && isApproved && (
                   <div className="space-y-4">
-                    <div className="bg-emerald-950/30 border border-emerald-600/50 rounded-lg p-4 space-y-2">
-                      <div className="flex items-center gap-2 text-emerald-300 font-bold text-sm">
-                        <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                    <div className="bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-600/50 rounded-lg p-4 space-y-2">
+                      <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300 font-bold text-sm">
+                        <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                         <span>APPROVED — READY TO APPLY</span>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed">
+                      <p className="text-xs text-foreground-secondary leading-relaxed">
                         The recommendation has been formally approved by the human operator.
                         Operational domain state will remain unchanged until you explicitly enact the changes.
                       </p>
                     </div>
 
                     {/* Operator Identification for Application */}
-                    <div className="space-y-3 bg-slate-950/50 p-4 rounded-lg border border-slate-800">
+                    <div className="space-y-3 bg-surface-muted p-4 rounded-lg border border-border">
                       <div>
                         <label
                           htmlFor="apply-actor-person-id"
-                          className="block text-xs font-mono text-slate-300 mb-1"
+                          className="block text-xs font-mono text-foreground mb-1"
                         >
                           Executing Actor Person ID *
                         </label>
@@ -383,20 +383,20 @@ export function ApprovalModal({
                           value={operatorId}
                           onChange={(e) => setOperatorId(e.target.value)}
                           placeholder="e.g. PER-OPS-001 or Operator UUID"
-                          className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs font-mono text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                          className="w-full bg-surface border border-border rounded px-3 py-1.5 text-xs font-mono text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-accent"
                         />
                       </div>
 
                       {validationError && (
-                        <p className="text-xs text-rose-400 font-medium">
+                        <p className="text-xs text-rose-500 font-medium">
                           {validationError}
                         </p>
                       )}
 
                       {applyMutation.error && (
-                        <div className="bg-rose-950/40 border border-rose-800 rounded p-2.5 text-xs text-rose-300">
+                        <div className="bg-rose-50 border border-rose-200 dark:bg-rose-950/40 dark:border-rose-800 rounded p-2.5 text-xs text-rose-700 dark:text-rose-300">
                           Application Failed: {applyMutation.error.message}.
-                          <span className="block text-slate-400 mt-1">
+                          <span className="block text-foreground-muted mt-1">
                             The recommendation remains APPROVED. Execution can be retried once resolved.
                           </span>
                         </div>
@@ -406,7 +406,7 @@ export function ApprovalModal({
                         <button
                           type="button"
                           onClick={onClose}
-                          className="px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded focus:outline-none focus:ring-2 focus:ring-slate-500"
+                          className="px-3 py-1.5 text-xs font-medium text-foreground bg-surface-elevated hover:bg-surface-muted border border-border rounded focus:outline-none focus:ring-2 focus:ring-accent"
                         >
                           Close Review
                         </button>
@@ -415,7 +415,7 @@ export function ApprovalModal({
                           data-testid="apply-recommendation-btn"
                           onClick={handleApply}
                           disabled={applyMutation.isPending || !operatorId.trim()}
-                          className="px-4 py-2 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed rounded shadow flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                          className="px-4 py-2 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed rounded shadow flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-accent"
                         >
                           <span>
                             {applyMutation.isPending
@@ -431,12 +431,12 @@ export function ApprovalModal({
 
                 {/* 4. Initial Phase: REVIEW / PENDING GOVERNANCE BOUNDARY */}
                 {!isApplied && !isRejected && !isApproved && (
-                  <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-slate-800">
-                    <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                  <div className="space-y-4 bg-surface-muted p-4 rounded-lg border border-border">
+                    <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-accent" />
                       Human Operator Governance Boundary
                     </h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className="text-xs text-foreground-secondary leading-relaxed">
                       Operational decisions require explicit human approval. Approval will not automatically execute domain updates.
                     </p>
 
@@ -444,7 +444,7 @@ export function ApprovalModal({
                       <div>
                         <label
                           htmlFor="approver-person-id"
-                          className="block text-xs font-mono text-slate-300 mb-1"
+                          className="block text-xs font-mono text-foreground mb-1"
                         >
                           Operator / Approver Person ID *
                         </label>
@@ -455,13 +455,13 @@ export function ApprovalModal({
                           value={operatorId}
                           onChange={(e) => setOperatorId(e.target.value)}
                           placeholder="e.g. PER-OPS-001 or Operator UUID"
-                          className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs font-mono text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                          className="w-full bg-surface border border-border rounded px-3 py-1.5 text-xs font-mono text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-accent"
                         />
                       </div>
                       <div>
                         <label
                           htmlFor="approver-role"
-                          className="block text-xs font-mono text-slate-300 mb-1"
+                          className="block text-xs font-mono text-foreground mb-1"
                         >
                           Approver Operational Role
                         </label>
@@ -471,7 +471,7 @@ export function ApprovalModal({
                           type="text"
                           value={approverRole}
                           onChange={(e) => setApproverRole(e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs font-mono text-slate-100 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                          className="w-full bg-surface border border-border rounded px-3 py-1.5 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                         />
                       </div>
                     </div>
@@ -479,7 +479,7 @@ export function ApprovalModal({
                     <div>
                       <label
                         htmlFor="approval-comment"
-                        className="block text-xs font-mono text-slate-300 mb-1"
+                        className="block text-xs font-mono text-foreground mb-1"
                       >
                         Operational Justification / Justification Comment
                       </label>
@@ -490,34 +490,34 @@ export function ApprovalModal({
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         placeholder="State reason for decision or operational constraints noted..."
-                        className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs font-mono text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                        className="w-full bg-surface border border-border rounded px-3 py-1.5 text-xs font-mono text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-accent"
                       />
                     </div>
 
                     {validationError && (
-                      <p className="text-xs text-rose-400 font-medium">
+                      <p className="text-xs text-rose-500 font-medium">
                         {validationError}
                       </p>
                     )}
 
                     {approveMutation.error && (
-                      <p className="text-xs text-rose-400 font-medium bg-rose-950/40 p-2 rounded border border-rose-900">
+                      <p className="text-xs text-rose-700 dark:text-rose-300 font-medium bg-rose-50 dark:bg-rose-950/40 p-2 rounded border border-rose-200 dark:border-rose-900">
                         Approval Failed: {approveMutation.error.message}
                       </p>
                     )}
 
                     {rejectMutation.error && (
-                      <p className="text-xs text-rose-400 font-medium bg-rose-950/40 p-2 rounded border border-rose-900">
+                      <p className="text-xs text-rose-700 dark:text-rose-300 font-medium bg-rose-50 dark:bg-rose-950/40 p-2 rounded border border-rose-200 dark:border-rose-900">
                         Rejection Failed: {rejectMutation.error.message}
                       </p>
                     )}
 
                     {/* Review Actions */}
-                    <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                    <div className="flex items-center justify-between pt-2 border-t border-border">
                       <button
                         type="button"
                         onClick={onClose}
-                        className="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 rounded focus:outline-none focus:ring-2 focus:ring-slate-500"
+                        className="px-3 py-1.5 text-xs font-medium text-foreground bg-surface-elevated hover:bg-surface-muted border border-border rounded focus:outline-none focus:ring-2 focus:ring-accent"
                       >
                         Cancel
                       </button>
@@ -532,7 +532,7 @@ export function ApprovalModal({
                             approveMutation.isPending ||
                             !operatorId.trim()
                           }
-                          className="px-3 py-1.5 text-xs font-medium text-white bg-rose-800 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed rounded focus:outline-none focus:ring-2 focus:ring-rose-500"
+                          className="px-3 py-1.5 text-xs font-medium text-white bg-rose-700 hover:bg-rose-600 disabled:opacity-50 disabled:cursor-not-allowed rounded focus:outline-none focus:ring-2 focus:ring-rose-500"
                         >
                           {rejectMutation.isPending
                             ? 'Rejecting...'
@@ -563,12 +563,12 @@ export function ApprovalModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-3 border-t border-slate-800 bg-slate-950/50 flex items-center justify-between text-xs font-mono text-slate-500">
+        <div className="px-6 py-3 border-t border-border bg-surface-elevated flex items-center justify-between text-xs font-mono text-foreground-muted">
           <span>Human Governance Invariant: Approval ≠ Application</span>
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-200"
+            className="text-foreground-muted hover:text-foreground"
           >
             Close
           </button>

@@ -27,9 +27,9 @@ const CARGO_STATUSES: CargoStatus[] = [
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-3 py-2 border-b border-slate-800/60 last:border-0">
-      <span className="text-slate-500 text-xs w-36 shrink-0 pt-0.5">{label}</span>
-      <span className="text-slate-200 text-sm break-all">{value ?? <span className="text-slate-600 italic">—</span>}</span>
+    <div className="flex items-start gap-3 py-2 border-b border-border last:border-0">
+      <span className="text-foreground-muted text-xs w-36 shrink-0 pt-0.5">{label}</span>
+      <span className="text-foreground text-sm break-all">{value ?? <span className="text-foreground-muted italic">—</span>}</span>
     </div>
   );
 }
@@ -77,16 +77,16 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-y-0 right-0 z-40 w-full max-w-xl flex flex-col bg-slate-900 border-l border-slate-700 shadow-2xl"
+      className="fixed inset-y-0 right-0 z-40 w-full max-w-xl flex flex-col bg-surface border-l border-border shadow-2xl"
       role="dialog"
       aria-modal="true"
       aria-label="Consignment details"
     >
       {/* Header */}
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm">
-        <Package className="w-5 h-5 text-cyan-400" aria-hidden="true" />
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-border bg-surface backdrop-blur-sm">
+        <Package className="w-5 h-5 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
         <div className="flex-1 min-w-0">
-          <h2 className="text-slate-100 font-semibold text-sm truncate">
+          <h2 className="text-foreground font-semibold text-sm truncate">
             {isLoading ? 'Loading…' : (consignment?.code ?? 'Consignment Details')}
           </h2>
         </div>
@@ -94,7 +94,7 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
         <button
           type="button"
           onClick={onClose}
-          className="text-slate-500 hover:text-slate-200 transition-colors ml-2"
+          className="text-foreground-muted hover:text-foreground transition-colors ml-2"
           aria-label="Close panel"
         >
           <X className="w-5 h-5" />
@@ -103,14 +103,14 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
 
       {/* Navigation tabs */}
       {consignment && (
-        <div className="flex border-b border-slate-800 bg-slate-950/40 px-6 text-xs">
+        <div className="flex border-b border-border bg-surface-muted/40 px-6 text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
             className={`py-2.5 px-3 font-medium border-b-2 transition-colors ${
               activeTab === 'overview'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-cyan-500 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300'
+                : 'border-transparent text-foreground-muted hover:text-foreground'
             }`}
           >
             Overview
@@ -120,8 +120,8 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
             onClick={() => setActiveTab('timeline')}
             className={`py-2.5 px-3 font-medium border-b-2 transition-colors ${
               activeTab === 'timeline'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-cyan-500 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300'
+                : 'border-transparent text-foreground-muted hover:text-foreground'
             }`}
           >
             Timeline
@@ -131,8 +131,8 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
             onClick={() => setActiveTab('packages')}
             className={`py-2.5 px-3 font-medium border-b-2 transition-colors ${
               activeTab === 'packages'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-cyan-500 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300'
+                : 'border-transparent text-foreground-muted hover:text-foreground'
             }`}
           >
             Packages
@@ -142,8 +142,8 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
             onClick={handleOpenActions}
             className={`py-2.5 px-3 font-medium border-b-2 transition-colors ${
               activeTab === 'actions'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-cyan-500 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300'
+                : 'border-transparent text-foreground-muted hover:text-foreground'
             }`}
           >
             Operations
@@ -165,21 +165,21 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
                   <EntityCode code={consignment.code} />
                   <StatusBadge status={consignment.status} />
                   <RiskBadge level={consignment.risk_level} />
-                  <span className="px-2 py-0.5 rounded text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">
+                  <span className="px-2 py-0.5 rounded text-xs font-semibold bg-surface-muted text-foreground-secondary border border-border">
                     P{consignment.priority}
                   </span>
                 </div>
 
-                <div className="divide-y divide-slate-800/60">
-                  <DetailRow label="Consignment ID" value={<span className="font-mono text-xs">{consignment.id}</span>} />
-                  <DetailRow label="Expedition ID" value={<span className="font-mono text-xs">{consignment.expedition_id}</span>} />
-                  <DetailRow label="Origin Location" value={<span className="font-mono text-xs">{consignment.origin_location_id}</span>} />
-                  <DetailRow label="Destination" value={<span className="font-mono text-xs">{consignment.destination_location_id}</span>} />
+                <div className="divide-y divide-border">
+                  <DetailRow label="Consignment ID" value={<span className="entity-id">{consignment.id}</span>} />
+                  <DetailRow label="Expedition ID" value={<span className="entity-id">{consignment.expedition_id}</span>} />
+                  <DetailRow label="Origin Location" value={<span className="entity-id">{consignment.origin_location_id}</span>} />
+                  <DetailRow label="Destination" value={<span className="entity-id">{consignment.destination_location_id}</span>} />
                   <DetailRow
                     label="Compliance"
                     value={
-                      <div className="flex items-center gap-1.5 text-xs text-slate-300">
-                        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                      <div className="flex items-center gap-1.5 text-xs text-foreground-secondary">
+                        <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                         <span>{consignment.compliance_status}</span>
                       </div>
                     }
@@ -196,7 +196,7 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
                     <DetailRow
                       label="Exception"
                       value={
-                        <span className="text-rose-400 font-medium">{consignment.exception_reason}</span>
+                        <span className="text-rose-600 dark:text-rose-400 font-medium">{consignment.exception_reason}</span>
                       }
                     />
                   )}
@@ -233,11 +233,11 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
             {/* Tab: Operational Actions */}
             {activeTab === 'actions' && (
               <div className="space-y-4">
-                <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/50 space-y-4">
-                  <h4 className="text-xs font-semibold text-slate-200">Update Operational State</h4>
+                <div className="p-3.5 rounded-lg border border-border bg-surface-muted space-y-4">
+                  <h4 className="text-xs font-semibold text-foreground">Update Operational State</h4>
 
                   {actionError && (
-                    <div className="text-xs text-rose-400 flex items-center gap-2">
+                    <div className="text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 shrink-0" />
                       <span>{actionError}</span>
                     </div>
@@ -245,13 +245,13 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
 
                   <div className="space-y-3 text-xs">
                     <div>
-                      <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                      <label className="block eyebrow mb-1.5">
                         Consignment Status
                       </label>
                       <select
                         value={selectedStatus}
                         onChange={(e) => setSelectedStatus(e.target.value as CargoStatus)}
-                        className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono focus:outline-none focus:border-cyan-600"
+                        className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       >
                         {CARGO_STATUSES.map((st) => (
                           <option key={st} value={st}>
@@ -262,7 +262,7 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                      <label className="block eyebrow mb-1.5">
                         Operational Priority (1 = highest)
                       </label>
                       <input
@@ -271,12 +271,12 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
                         max="10"
                         value={priority}
                         onChange={(e) => setPriority(Number(e.target.value))}
-                        className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono focus:outline-none focus:border-cyan-600"
+                        className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                      <label className="block eyebrow mb-1.5">
                         Transport Plan Summary
                       </label>
                       <textarea
@@ -284,7 +284,7 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
                         value={transportPlan}
                         onChange={(e) => setTransportPlan(e.target.value)}
                         placeholder="Routing notes, vessel assignment, etc."
-                        className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs focus:outline-none focus:border-cyan-600"
+                        className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       />
                     </div>
                   </div>
@@ -294,7 +294,7 @@ export function ConsignmentDetailPanel({ consignmentId, onClose }: Props) {
                       type="button"
                       onClick={() => setConfirmPending(true)}
                       disabled={updateMutation.isPending}
-                      className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium transition-colors disabled:opacity-50"
+                      className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium transition-colors disabled:opacity-50 shadow-sm"
                     >
                       {updateMutation.isPending ? 'Updating…' : 'Save Changes'}
                     </button>

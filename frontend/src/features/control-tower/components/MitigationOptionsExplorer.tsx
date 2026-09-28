@@ -37,22 +37,22 @@ const FEASIBILITY_STYLES: Record<
 > = {
   FEASIBLE: {
     label: 'FEASIBLE',
-    badgeClass: 'bg-emerald-950/80 text-emerald-300 border-emerald-600',
+    badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-600',
     icon: CheckCircle2,
   },
   CONSTRAINED: {
     label: 'CONSTRAINED',
-    badgeClass: 'bg-amber-950/80 text-amber-300 border-amber-600',
+    badgeClass: 'bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-600',
     icon: AlertTriangle,
   },
   NOT_EVALUABLE: {
     label: 'NOT EVALUABLE',
-    badgeClass: 'bg-slate-800 text-slate-300 border-slate-600',
+    badgeClass: 'bg-surface-muted text-foreground-muted border-border',
     icon: Clock,
   },
   INFEASIBLE: {
     label: 'INFEASIBLE',
-    badgeClass: 'bg-rose-950/80 text-rose-300 border-rose-600',
+    badgeClass: 'bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-950/80 dark:text-rose-300 dark:border-rose-600',
     icon: AlertTriangle,
   },
 };
@@ -117,21 +117,21 @@ export function MitigationOptionsExplorer({
       aria-labelledby="mitigation-options-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
     >
-      <div className="w-full max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div className="w-full max-w-4xl max-h-[90vh] bg-surface border border-border rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Modal Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between shrink-0">
+        <div className="p-4 sm:p-5 border-b border-border bg-surface-elevated flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-sky-950/50 border border-sky-800/60 text-sky-400">
+            <div className="p-2 rounded-lg bg-sky-50 border border-sky-200 text-sky-700 dark:bg-sky-950/50 dark:border-sky-800/60 dark:text-sky-400">
               <Sparkles className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
               <div className="flex items-center gap-2.5">
-                <h3 id="mitigation-options-title" className="text-base font-bold text-slate-100 font-mono">
+                <h3 id="mitigation-options-title" className="text-base font-bold text-foreground font-mono">
                   Candidate Mitigation Options Explorer
                 </h3>
                 <ProvenanceTag provenance="DERIVED" />
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-foreground-secondary mt-0.5">
                 Deterministic candidates evaluated against hard & soft polar constraints
               </p>
             </div>
@@ -139,7 +139,7 @@ export function MitigationOptionsExplorer({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+            className="p-1 rounded text-foreground-muted hover:text-foreground hover:bg-surface-muted transition-colors"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -151,22 +151,22 @@ export function MitigationOptionsExplorer({
           {/* Replan Summary Banner */}
           {isLoading && <LoadingSkeleton lines={3} />}
           {replan && (
-            <div className="p-3.5 rounded-lg bg-slate-950/60 border border-slate-800 text-xs space-y-2">
+            <div className="p-3.5 rounded-lg bg-surface-muted border border-border text-xs space-y-2">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <GitPullRequest className="w-4 h-4 text-purple-400" />
+                  <GitPullRequest className="w-4 h-4 text-purple-500 dark:text-purple-400" />
                   <EntityCode code={replan.replan_code} />
-                  <span className="font-mono text-slate-400 font-medium">
-                    Status: <span className="text-slate-200">{replan.status}</span>
+                  <span className="font-mono text-foreground-muted font-medium">
+                    Status: <span className="text-foreground">{replan.status}</span>
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-slate-400">
+                <span className="text-[11px] font-mono text-foreground-muted">
                   {new Date(replan.created_at).toLocaleString()}
                 </span>
               </div>
               {replan.trigger_reason && (
-                <div className="text-slate-300 font-sans">
-                  <span className="font-mono text-slate-400 font-semibold">Trigger Reason: </span>
+                <div className="text-foreground-secondary font-sans">
+                  <span className="font-mono text-foreground-muted font-semibold">Trigger Reason: </span>
                   {replan.trigger_reason}
                 </div>
               )}
@@ -174,12 +174,12 @@ export function MitigationOptionsExplorer({
           )}
 
           {/* Action to Generate Options if not already done */}
-          <div className="flex items-center justify-between gap-3 p-3 bg-slate-950/40 border border-slate-800 rounded-lg">
+          <div className="flex items-center justify-between gap-3 p-3 bg-surface-muted border border-border rounded-lg">
             <div>
-              <div className="text-xs font-semibold text-slate-200">
+              <div className="text-xs font-semibold text-foreground">
                 Deterministic Constraint-Checked Options
               </div>
-              <div className="text-[11px] text-slate-400 mt-0.5">
+              <div className="text-[11px] text-foreground-muted mt-0.5">
                 Generates candidate operational options and synthesizes human-governed recommendations.
               </div>
             </div>
@@ -188,7 +188,7 @@ export function MitigationOptionsExplorer({
               data-testid="generate-options-btn"
               disabled={generateMutation.isPending}
               onClick={handleGenerate}
-              className="px-3.5 py-1.5 text-xs font-semibold font-mono bg-sky-600 hover:bg-sky-500 text-slate-950 rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="px-3.5 py-1.5 text-xs font-semibold font-mono bg-accent text-slate-950 hover:bg-accent/80 rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             >
               {generateMutation.isPending ? (
                 <>
@@ -205,8 +205,8 @@ export function MitigationOptionsExplorer({
           </div>
 
           {error && (
-            <div className="p-3 rounded bg-rose-950/30 border border-rose-900/60 text-xs text-rose-300 flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+            <div className="p-3 rounded bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-950/30 dark:border-rose-900/60 dark:text-rose-300 text-xs flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
@@ -214,8 +214,8 @@ export function MitigationOptionsExplorer({
           {/* Options List */}
           {options.length > 0 && (
             <div className="space-y-4">
-              <h4 className="text-xs font-mono font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                <ListChecks className="w-4 h-4 text-sky-400" />
+              <h4 className="text-xs font-mono font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                <ListChecks className="w-4 h-4 text-accent" />
                 <span>Evaluated Mitigation Options ({options.length})</span>
               </h4>
 
@@ -233,12 +233,12 @@ export function MitigationOptionsExplorer({
                     <div
                       key={opt.id}
                       data-testid={`mitigation-option-card-${opt.option_code.toLowerCase()}`}
-                      className="p-4 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition-colors space-y-3"
+                      className="p-4 rounded-lg bg-surface border border-border hover:border-border-strong transition-colors space-y-3"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-2.5">
                           <EntityCode code={opt.option_code} />
-                          <span className="text-xs font-semibold text-slate-100 font-sans">
+                          <span className="text-xs font-semibold text-foreground font-sans">
                             {opt.title}
                           </span>
                         </div>
@@ -250,35 +250,35 @@ export function MitigationOptionsExplorer({
                         </span>
                       </div>
 
-                      <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                      <p className="text-xs text-foreground-secondary font-sans leading-relaxed">
                         {opt.description}
                       </p>
 
                       {/* Tradeoffs & Metrics */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
-                        <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                          <span className="text-slate-500 block">Delay Impact</span>
-                          <span className="font-semibold text-slate-200 flex items-center gap-1 mt-0.5">
-                            <Clock className="w-3 h-3 text-amber-400" />
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-border text-[11px] font-mono">
+                        <div className="p-2 rounded bg-surface-muted border border-border">
+                          <span className="text-foreground-muted block">Delay Impact</span>
+                          <span className="font-semibold text-foreground flex items-center gap-1 mt-0.5">
+                            <Clock className="w-3 h-3 text-amber-500 dark:text-amber-400" />
                             {opt.estimated_delay_hours > 0 ? `+${opt.estimated_delay_hours} hrs` : '0 hrs'}
                           </span>
                         </div>
-                        <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                          <span className="text-slate-500 block">Cost Delta</span>
-                          <span className="font-semibold text-slate-200 flex items-center gap-1 mt-0.5">
-                            <Coins className="w-3 h-3 text-cyan-400" />
+                        <div className="p-2 rounded bg-surface-muted border border-border">
+                          <span className="text-foreground-muted block">Cost Delta</span>
+                          <span className="font-semibold text-foreground flex items-center gap-1 mt-0.5">
+                            <Coins className="w-3 h-3 text-accent" />
                             {opt.estimated_cost_delta > 0 ? `+$${opt.estimated_cost_delta.toLocaleString()}` : '$0'}
                           </span>
                         </div>
-                        <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                          <span className="text-slate-500 block">Action Type</span>
-                          <span className="font-semibold text-slate-200 mt-0.5 block truncate">
+                        <div className="p-2 rounded bg-surface-muted border border-border">
+                          <span className="text-foreground-muted block">Action Type</span>
+                          <span className="font-semibold text-foreground mt-0.5 block truncate">
                             {opt.action_type}
                           </span>
                         </div>
-                        <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                          <span className="text-slate-500 block">Risk Score</span>
-                          <span className="font-semibold text-slate-200 mt-0.5 block">
+                        <div className="p-2 rounded bg-surface-muted border border-border">
+                          <span className="text-foreground-muted block">Risk Score</span>
+                          <span className="font-semibold text-foreground mt-0.5 block">
                             {opt.risk_score} / 100
                           </span>
                         </div>
@@ -286,19 +286,19 @@ export function MitigationOptionsExplorer({
 
                       {/* Assumptions */}
                       {opt.assumptions && opt.assumptions.length > 0 && (
-                        <div className="text-[11px] text-slate-400 font-sans">
-                          <span className="font-mono text-slate-500 font-semibold">Assumptions: </span>
+                        <div className="text-[11px] text-foreground-secondary font-sans">
+                          <span className="font-mono text-foreground-muted font-semibold">Assumptions: </span>
                           {opt.assumptions.join('; ')}
                         </div>
                       )}
 
                       {/* Recommendation Action Button */}
                       {matchingRec && (
-                        <div className="pt-2 flex items-center justify-between gap-3 border-t border-slate-800/80">
-                          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-                            <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                        <div className="pt-2 flex items-center justify-between gap-3 border-t border-border">
+                          <div className="flex items-center gap-2 text-xs font-mono text-foreground-muted">
+                            <ShieldCheck className="w-4 h-4 text-accent" />
                             <span>Synthesized Recommendation:</span>
-                            <span className="text-slate-200 font-sans font-medium">
+                            <span className="text-foreground font-sans font-medium">
                               {matchingRec.title}
                             </span>
                           </div>
@@ -309,7 +309,7 @@ export function MitigationOptionsExplorer({
                               onClose();
                               onSelectRecommendation(matchingRec.id);
                             }}
-                            className="px-3 py-1.5 text-xs font-semibold font-mono bg-cyan-600 hover:bg-cyan-500 text-slate-950 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 shadow-sm"
+                            className="px-3 py-1.5 text-xs font-semibold font-mono bg-accent text-slate-950 hover:bg-accent/80 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 shadow-sm"
                           >
                             <span>Review & Decide</span>
                             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -325,11 +325,11 @@ export function MitigationOptionsExplorer({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-end shrink-0">
+        <div className="p-4 border-t border-border bg-surface-elevated flex items-center justify-end shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-mono text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+            className="px-4 py-2 text-xs font-mono text-foreground bg-surface-elevated hover:bg-surface-muted border border-border rounded-lg transition-colors"
           >
             Close Explorer
           </button>

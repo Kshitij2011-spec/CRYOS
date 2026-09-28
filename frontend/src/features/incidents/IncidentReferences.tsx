@@ -50,10 +50,10 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
   };
 
   return (
-    <div className="space-y-4 font-mono text-xs">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-slate-400 uppercase tracking-wider text-[11px] font-semibold flex items-center gap-1.5">
-          <Link2 className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+        <span className="text-foreground-secondary uppercase tracking-wider text-[11px] font-semibold flex items-center gap-1.5">
+          <Link2 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
           Attached Cross-Domain Resources ({references.length})
         </span>
         <button
@@ -62,7 +62,7 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
             setShowAddForm(!showAddForm);
             setErrorMessage(null);
           }}
-          className="flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition-colors"
+          className="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-elevated hover:bg-surface-muted text-foreground border border-border text-xs transition-colors font-medium"
         >
           <Plus className="w-3.5 h-3.5" aria-hidden="true" />
           {showAddForm ? 'Cancel' : 'Attach Reference'}
@@ -74,17 +74,17 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
       )}
 
       {showAddForm && (
-        <form onSubmit={handleSubmit} className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-3">
+        <form onSubmit={handleSubmit} className="p-3 rounded-lg bg-surface-elevated border border-border space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="ref-type" className="block text-slate-400 mb-1">
+              <label htmlFor="ref-type" className="block text-foreground-secondary mb-1">
                 Domain Reference Type
               </label>
               <select
                 id="ref-type"
                 value={refType}
                 onChange={(e) => setRefType(e.target.value as IncidentReferenceType)}
-                className="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-surface border border-border rounded px-2.5 py-1.5 text-foreground focus:outline-none focus:border-cyan-500"
               >
                 {REF_TYPES.map((t) => (
                   <option key={t} value={t}>
@@ -95,8 +95,8 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
             </div>
 
             <div>
-              <label htmlFor="ref-id" className="block text-slate-400 mb-1">
-                Resource Entity ID / UUID <span className="text-rose-400">*</span>
+              <label htmlFor="ref-id" className="block text-foreground-secondary mb-1">
+                Resource Entity ID / UUID <span className="text-rose-500">*</span>
               </label>
               <input
                 id="ref-id"
@@ -104,14 +104,14 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
                 value={refId}
                 onChange={(e) => setRefId(e.target.value)}
                 placeholder="Target entity UUID"
-                className="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-surface border border-border rounded px-2.5 py-1.5 text-foreground focus:outline-none focus:border-cyan-500"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="ref-notes" className="block text-slate-400 mb-1">
+            <label htmlFor="ref-notes" className="block text-foreground-secondary mb-1">
               Operational Notes
             </label>
             <input
@@ -120,14 +120,14 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Primary generator failed; power routed to backup"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface border border-border rounded px-2.5 py-1.5 text-foreground focus:outline-none focus:border-cyan-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={addRefMutation.isPending}
-            className="w-full py-1.5 rounded bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 text-white font-medium transition-colors"
+            className="w-full py-1.5 rounded bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-medium transition-colors"
           >
             {addRefMutation.isPending ? 'Attaching...' : 'Save Reference'}
           </button>
@@ -135,15 +135,15 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
       )}
 
       {isLoading ? (
-        <div className="p-4 text-center text-slate-500">Loading references...</div>
+        <div className="p-4 text-center text-foreground-muted">Loading references...</div>
       ) : references.length === 0 ? (
-        <div className="p-4 text-center text-slate-500 border border-slate-800 rounded bg-slate-900/30">
+        <div className="p-4 text-center text-foreground-muted border border-border rounded bg-surface-muted">
           No related resources currently linked to this incident.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded border border-slate-800">
+        <div className="overflow-x-auto rounded border border-border bg-surface">
           <table className="w-full text-left text-xs" role="table" aria-label="Incident references table">
-            <thead className="bg-slate-900 font-mono text-slate-400 uppercase tracking-wider border-b border-slate-800">
+            <thead className="bg-surface-muted text-xs font-semibold text-foreground-secondary uppercase tracking-[0.05em] border-b border-border">
               <tr>
                 <th className="px-3 py-2">Type</th>
                 <th className="px-3 py-2">Reference ID</th>
@@ -151,15 +151,15 @@ export function IncidentReferences({ incidentId, references, isLoading }: Props)
                 <th className="px-3 py-2">Linked At</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
+            <tbody className="divide-y divide-border/60 text-sm">
               {references.map((ref) => (
-                <tr key={ref.id} className="hover:bg-slate-800/30">
-                  <td className="px-3 py-2 text-cyan-300 font-semibold">{ref.reference_type}</td>
-                  <td className="px-3 py-2 text-slate-300 truncate max-w-[150px]" title={ref.reference_id}>
+                <tr key={ref.id} className="hover:bg-surface-elevated transition-colors">
+                  <td className="px-3 py-2 text-cyan-700 dark:text-cyan-300 font-semibold">{ref.reference_type}</td>
+                  <td className="px-3 py-2 text-foreground truncate max-w-[150px]" title={ref.reference_id}>
                     {ref.reference_id.slice(0, 8)}...
                   </td>
-                  <td className="px-3 py-2 text-slate-400">{ref.notes ?? '-'}</td>
-                  <td className="px-3 py-2 text-slate-500">
+                  <td className="px-3 py-2 text-foreground-secondary">{ref.notes ?? '-'}</td>
+                  <td className="px-3 py-2 text-foreground-muted">
                     {new Date(ref.created_at).toLocaleString()}
                   </td>
                 </tr>

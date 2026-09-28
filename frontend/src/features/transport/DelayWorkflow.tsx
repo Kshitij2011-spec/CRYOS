@@ -59,24 +59,24 @@ export function DelayWorkflow({ leg, onSuccess, onCancel }: Props) {
 
   if (impactResult) {
     return (
-      <div className="p-4 rounded-xl border border-amber-800/80 bg-amber-950/30 space-y-4 text-xs">
-        <div className="flex items-center gap-2 text-amber-300 font-semibold">
-          <CheckCircle2 className="w-4 h-4 text-amber-400" />
+      <div className="p-4 rounded-xl border border-amber-300 dark:border-amber-800/80 bg-amber-50 dark:bg-amber-950/30 space-y-4 text-xs">
+        <div className="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-semibold">
+          <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           <span>Delay Propagated Successfully</span>
         </div>
 
-        <p className="text-slate-300">{impactResult.summary}</p>
+        <p className="text-foreground">{impactResult.summary}</p>
 
         {impactResult.affected_cargo_consignments.length > 0 && (
-          <div className="space-y-2 pt-2 border-t border-amber-800/40">
-            <p className="text-[11px] font-mono text-amber-300/90 uppercase">
+          <div className="space-y-2 pt-2 border-t border-amber-200 dark:border-amber-800/40">
+            <p className="text-[11px] font-semibold text-amber-800 dark:text-amber-300/90 uppercase tracking-[0.05em]">
               Affected Manifested Consignments ({impactResult.affected_cargo_consignments.length})
             </p>
             <div className="space-y-1.5">
               {impactResult.affected_cargo_consignments.map((c) => (
                 <div
                   key={c.id}
-                  className="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800"
+                  className="flex items-center justify-between p-2 rounded bg-surface border border-border"
                 >
                   <EntityCode code={c.code} />
                   <div className="flex items-center gap-2">
@@ -93,7 +93,7 @@ export function DelayWorkflow({ leg, onSuccess, onCancel }: Props) {
           <button
             type="button"
             onClick={onCancel}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium"
+            className="px-3 py-1.5 rounded-lg bg-surface-elevated hover:bg-surface-muted text-foreground border border-border font-medium transition-colors"
           >
             Close
           </button>
@@ -103,20 +103,20 @@ export function DelayWorkflow({ leg, onSuccess, onCancel }: Props) {
   }
 
   return (
-    <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/70 space-y-4">
+    <div className="p-4 rounded-xl border border-border bg-surface space-y-4">
       <div className="flex items-center gap-2">
-        <AlertTriangle className="w-4 h-4 text-amber-400" aria-hidden="true" />
-        <h4 className="text-xs font-semibold text-slate-200">
+        <AlertTriangle className="w-4 h-4 text-amber-500 dark:text-amber-400" aria-hidden="true" />
+        <h4 className="text-xs font-semibold text-foreground">
           Record Transport Leg Operational Delay
         </h4>
       </div>
 
-      <p className="text-xs text-slate-400">
+      <p className="text-xs text-foreground-secondary">
         Delaying this transport leg will automatically propagate arrival adjustments and recalculate schedule risk across all manifested cargo consignments.
       </p>
 
       {errorMsg && (
-        <div className="text-xs text-rose-400 p-2.5 rounded bg-rose-950/40 border border-rose-800/60">
+        <div className="text-xs text-rose-700 dark:text-rose-300 p-2.5 rounded bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800/60">
           {errorMsg}
         </div>
       )}
@@ -124,10 +124,10 @@ export function DelayWorkflow({ leg, onSuccess, onCancel }: Props) {
       <form onSubmit={handleSubmit} className="space-y-3 text-xs">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <span className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+            <span className="block eyebrow mb-1.5">
               Current Scheduled Arrival
             </span>
-            <div className="px-3 py-2 rounded bg-slate-800/80 border border-slate-700/60 font-mono text-slate-300">
+            <div className="px-3 py-2 rounded bg-surface-muted border border-border text-sm tabular-nums text-foreground">
               {leg.estimated_arrival_at
                 ? new Date(leg.estimated_arrival_at).toLocaleString()
                 : leg.planned_arrival_at
@@ -137,21 +137,21 @@ export function DelayWorkflow({ leg, onSuccess, onCancel }: Props) {
           </div>
 
           <div>
-            <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+            <label className="block eyebrow mb-1.5">
               New Estimated Arrival *
             </label>
             <input
               type="datetime-local"
               value={newEstimatedArrival}
               onChange={(e) => setNewEstimatedArrival(e.target.value)}
-              className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono focus:outline-none focus:border-cyan-600"
+              className="w-full px-3 py-2 rounded bg-surface-elevated border border-border text-foreground text-sm focus:outline-none focus:border-cyan-600"
               required
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+          <label className="block eyebrow mb-1.5">
             Operational Delay Reason / Justification *
           </label>
           <textarea
@@ -159,7 +159,7 @@ export function DelayWorkflow({ leg, onSuccess, onCancel }: Props) {
             value={delayReason}
             onChange={(e) => setDelayReason(e.target.value)}
             placeholder="Severe katabatic winds, sea-ice barrier blockage, mechanical hold..."
-            className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-700 text-slate-200 text-xs focus:outline-none focus:border-cyan-600"
+            className="w-full px-3 py-2 rounded bg-surface-elevated border border-border text-foreground text-xs focus:outline-none focus:border-cyan-600"
             required
           />
         </div>
@@ -168,7 +168,7 @@ export function DelayWorkflow({ leg, onSuccess, onCancel }: Props) {
           <button
             type="button"
             onClick={onCancel}
-            className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 text-xs"
+            className="px-3 py-1.5 rounded-lg text-foreground-secondary hover:text-foreground text-xs transition-colors"
           >
             Cancel
           </button>

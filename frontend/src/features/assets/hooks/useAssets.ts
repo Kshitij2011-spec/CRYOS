@@ -26,5 +26,7 @@ export function useAssets(filters?: AssetFilters) {
         location_id: (raw.location_id as string) ?? (raw.current_location_id as string) ?? '',
       })) as unknown as Asset[];
     },
+    refetchInterval: 25_000,
+    refetchIntervalInBackground: false,
   });
 }

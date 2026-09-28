@@ -24,5 +24,7 @@ export function useIncidents(filters?: IncidentFilters) {
         incident_type: (raw.type as string) ?? (raw.incident_type as string) ?? '',
       })) as unknown as Incident[];
     },
+    refetchInterval: 25_000,
+    refetchIntervalInBackground: false,
   });
 }

@@ -10,6 +10,8 @@ import { LoadingSkeleton } from '../../components/shared/LoadingSkeleton';
 import { EmptyState } from '../../components/shared/EmptyState';
 import { ErrorDisplay } from '../../components/shared/ErrorDisplay';
 import { PageHeader } from '../../components/shared/PageHeader';
+import { AutoRefreshIndicator } from '../../components/shared/AutoRefreshIndicator';
+import { useLocationsLookup } from '../locations/hooks/useLocations';
 import type { CargoConsignment, CargoRiskLevel } from '../../lib/types/api';
 
 const STATUS_OPTIONS = [
@@ -41,10 +43,12 @@ export function CargoPage() {
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const { data, isLoading, error } = useConsignments({
+  const { data, dataUpdatedAt, isFetching, isLoading, error } = useConsignments({
     status: statusFilter || undefined,
     risk_level: riskFilter || undefined,
   });
+
+  const locationsLookup = useLocationsLookup();
 
   const consignments = data ?? [];
 
@@ -80,23 +84,27 @@ export function CargoPage() {
       key: 'priority',
       header: 'Priority',
       render: (c: CargoConsignment) => (
-        <span className="font-mono text-xs text-slate-300">P{c.priority}</span>
+        <span className="text-sm font-semibold text-foreground-secondary tabular-nums">P{c.priority}</span>
       ),
     },
     {
       key: 'route',
       header: 'Origin → Destination',
-      render: (c: CargoConsignment) => (
-        <span className="font-mono text-xs text-slate-400">
-          {c.origin_location_id.slice(0, 8)}… → {c.destination_location_id.slice(0, 8)}…
-        </span>
-      ),
+      render: (c: CargoConsignment) => {
+        const origin = locationsLookup.get(c.origin_location_id)?.name ?? c.origin_location_id.slice(0, 8);
+        const destination = locationsLookup.get(c.destination_location_id)?.name ?? c.destination_location_id.slice(0, 8);
+        return (
+          <span className="text-sm text-foreground-secondary">
+            {origin} → {destination}
+          </span>
+        );
+      },
     },
     {
       key: 'required_by_at',
       header: 'Required By',
       render: (c: CargoConsignment) => (
-        <span className="font-mono text-xs text-slate-400">
+        <span className="text-sm tabular-nums text-foreground-muted">
           {new Date(c.required_by_at).toLocaleDateString()}
         </span>
       ),
@@ -109,9 +117,12 @@ export function CargoPage() {
         title="Cargo Consignments"
         subtitle="Operational cargo manifests, transit tracking, and schedule risk"
         actions={
-          <div className="flex items-center gap-2">
-            <Package className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-            <span className="text-slate-400 text-xs">{filtered.length} consignments</span>
+          <div className="flex items-center gap-3">
+            <AutoRefreshIndicator dataUpdatedAt={dataUpdatedAt} intervalSeconds={25} isFetching={isFetching} />
+            <div className="flex items-center gap-1.5">
+              <Package className="w-4 h-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
+              <span className="text-foreground-muted text-xs">{filtered.length} consignments</span>
+            </div>
           </div>
         }
       />
@@ -121,7 +132,7 @@ export function CargoPage() {
         {/* Search */}
         <div className="relative">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted"
             aria-hidden="true"
           />
           <input
@@ -130,7 +141,7 @@ export function CargoPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search consignments"
-            className="pl-9 pr-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder-slate-500 focus:outline-none focus:border-cyan-600 w-64"
+            className="pl-9 pr-4 py-2 rounded-lg bg-surface border border-border text-foreground text-sm placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent w-64 shadow-sm"
           />
         </div>
 
@@ -140,7 +151,7 @@ export function CargoPage() {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             aria-label="Filter by cargo status"
-            className="px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium focus:outline-none focus:border-cyan-600"
+            className="px-3 py-2 rounded-lg bg-surface border border-border text-foreground text-xs font-medium focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent shadow-sm"
           >
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -158,10 +169,10 @@ export function CargoPage() {
               type="button"
               onClick={() => setRiskFilter(r.value)}
               aria-pressed={riskFilter === r.value}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border shadow-sm ${
                 riskFilter === r.value
-                  ? 'bg-cyan-900/60 border-cyan-700 text-cyan-300'
-                  : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200'
+                  ? 'bg-cyan-500/15 border-cyan-400/50 text-cyan-700 dark:bg-cyan-900/60 dark:border-cyan-700 dark:text-cyan-300'
+                  : 'bg-surface border-border text-foreground-muted hover:text-foreground hover:bg-surface-elevated'
               }`}
             >
               {r.label}
@@ -171,7 +182,7 @@ export function CargoPage() {
       </div>
 
       {/* Table Container */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+      <div className="rounded-xl border border-border bg-surface overflow-hidden shadow-sm">
         {isLoading && (
           <div className="p-6">
             <LoadingSkeleton lines={8} />
@@ -186,7 +197,7 @@ export function CargoPage() {
           <EmptyState
             title="No consignments found"
             message="No cargo consignments match the selected search or filter criteria."
-            icon={<AlertCircle className="w-12 h-12 text-slate-500" />}
+            icon={<AlertCircle className="w-12 h-12 text-foreground-muted" />}
           />
         )}
         {!isLoading && !error && filtered.length > 0 && (

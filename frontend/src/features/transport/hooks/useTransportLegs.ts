@@ -19,5 +19,7 @@ export function useTransportLegs(filters: TransportLegFilters = {}) {
   return useQuery<TransportLeg[]>({
     queryKey: ['transport-legs', filters],
     queryFn: ({ signal }) => apiClient.get<TransportLeg[]>(`/transport/legs${query}`, signal),
+    refetchInterval: 25_000,
+    refetchIntervalInBackground: false,
   });
 }

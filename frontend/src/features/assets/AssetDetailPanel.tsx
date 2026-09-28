@@ -43,22 +43,22 @@ export function AssetDetailPanel({ asset, onClose, onRefreshAsset }: Props) {
 
   return (
     <div
-      className="fixed inset-y-0 right-0 w-full max-w-2xl bg-slate-950 border-l border-slate-800 shadow-2xl z-50 flex flex-col overflow-hidden"
+      className="fixed inset-y-0 right-0 w-full max-w-2xl bg-surface border-l border-border shadow-2xl z-50 flex flex-col overflow-hidden"
       role="dialog"
       aria-modal="true"
       aria-label={`Asset details for ${asset.code}`}
     >
       {/* Drawer Header */}
-      <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
+      <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-surface/90 backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <Cpu className="w-5 h-5 text-cyan-400" aria-hidden="true" />
+          <Cpu className="w-5 h-5 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
           <div>
             <div className="flex items-center gap-2">
               <EntityCode code={asset.code} />
               <StatusBadge status={asset.status} />
               <ProvenanceTag provenance={asset.data_provenance} />
             </div>
-            <h2 className="text-base font-semibold text-slate-100 mt-0.5">
+            <h2 className="text-base font-semibold text-foreground mt-0.5">
               {asset.type} {asset.serial_number ? `· SN: ${asset.serial_number}` : ''}
             </h2>
           </div>
@@ -66,7 +66,7 @@ export function AssetDetailPanel({ asset, onClose, onRefreshAsset }: Props) {
         <button
           type="button"
           onClick={onClose}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+          className="p-1.5 rounded-lg text-foreground-muted hover:text-foreground hover:bg-surface-elevated transition-colors"
           aria-label="Close detail panel"
         >
           <X className="w-5 h-5" />
@@ -76,44 +76,44 @@ export function AssetDetailPanel({ asset, onClose, onRefreshAsset }: Props) {
       {/* Drawer Body */}
       <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
         {/* Asset Specifications */}
-        <section className="p-4 rounded-lg bg-slate-900/60 border border-slate-800 text-xs font-mono">
-          <h3 className="text-slate-400 uppercase tracking-wider text-[11px] mb-3 font-semibold">
+        <section className="p-4 rounded-lg bg-surface-elevated border border-border">
+          <h3 className="text-foreground-muted uppercase tracking-wider text-[11px] mb-3 font-semibold">
             Equipment Registry Details
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <div>
-              <span className="text-slate-500">Condition:</span>
-              <p className="text-slate-200 font-semibold">{asset.condition}</p>
+              <span className="text-foreground-muted">Condition:</span>
+              <p className="text-foreground font-semibold">{asset.condition}</p>
             </div>
             <div>
-              <span className="text-slate-500">Criticality:</span>
-              <p className="text-amber-400 font-semibold">{asset.criticality}</p>
+              <span className="text-foreground-muted">Criticality:</span>
+              <p className="text-amber-600 dark:text-amber-400 font-semibold">{asset.criticality}</p>
             </div>
             <div>
-              <span className="text-slate-500">Current Location:</span>
-              <p className="text-slate-200 font-semibold truncate" title={asset.location_id}>
+              <span className="text-foreground-muted">Current Location:</span>
+              <p className="text-foreground font-semibold truncate" title={asset.location_id}>
                 {asset.location_id.slice(0, 8)}...
               </p>
             </div>
             {asset.commissioned_at && (
               <div>
-                <span className="text-slate-500">Commissioned:</span>
-                <p className="text-slate-300">
+                <span className="text-foreground-muted">Commissioned:</span>
+                <p className="text-foreground">
                   {new Date(asset.commissioned_at).toLocaleDateString()}
                 </p>
               </div>
             )}
             {asset.retired_at && (
               <div>
-                <span className="text-slate-500">Retired:</span>
-                <p className="text-rose-400 font-semibold">
+                <span className="text-foreground-muted">Retired:</span>
+                <p className="text-rose-600 dark:text-rose-400 font-semibold">
                   {new Date(asset.retired_at).toLocaleDateString()}
                 </p>
               </div>
             )}
           </div>
           {asset.description && (
-            <p className="mt-3 pt-2 border-t border-slate-800/80 text-slate-400">
+            <p className="mt-3 pt-2 border-t border-border/80 text-foreground-secondary">
               {asset.description}
             </p>
           )}
@@ -121,21 +121,21 @@ export function AssetDetailPanel({ asset, onClose, onRefreshAsset }: Props) {
 
         {/* State Machine & Relocation Workflows */}
         <section className="space-y-3">
-          <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
             Operational State & Relocation
           </h3>
           <AssetStatusActions asset={asset} onSuccess={handleRefresh} />
         </section>
 
         {/* Maintenance Management Section */}
-        <section className="space-y-4 pt-4 border-t border-slate-800">
+        <section className="space-y-4 pt-4 border-t border-border">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <Wrench className="w-4 h-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
               Maintenance Orders ({maintenanceRecords.length})
             </h3>
-            <span className="text-xs text-slate-500 font-mono">
+            <span className="meta-text">
               Schedule or execute work orders
             </span>
           </div>
@@ -156,9 +156,9 @@ export function AssetDetailPanel({ asset, onClose, onRefreshAsset }: Props) {
         </section>
 
         {/* Operational Timeline Section */}
-        <section className="space-y-4 pt-4 border-t border-slate-800">
-          <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-            <Clock className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+        <section className="space-y-4 pt-4 border-t border-border">
+          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <Clock className="w-4 h-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
             Operational Event History
           </h3>
           <AssetTimeline

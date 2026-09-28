@@ -24,26 +24,26 @@ export function OperationalTable<T>({
     <div className={`overflow-x-auto ${className}`}>
       <table className="w-full text-sm" role="table">
         <thead>
-          <tr className="border-b border-slate-800">
+          <tr className="border-b border-border">
             {columns.map((col) => (
               <th
                 key={col.key}
                 scope="col"
-                className={`px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider ${col.className ?? ''}`}
+                className={`px-4 py-3 text-left text-xs font-semibold text-foreground-muted uppercase tracking-[0.05em] ${col.className ?? ''}`}
               >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-800/60">
+        <tbody className="divide-y divide-border">
           {data.map((row) => (
             <tr
               key={getRowKey(row)}
               onClick={onRowClick ? () => onRowClick(row) : undefined}
               className={`transition-colors ${
                 onRowClick
-                  ? 'cursor-pointer hover:bg-slate-800/60 focus-within:bg-slate-800/60'
+                  ? 'cursor-pointer hover:bg-surface-elevated focus-within:bg-surface-elevated'
                   : ''
               }`}
               tabIndex={onRowClick ? 0 : undefined}
@@ -58,7 +58,7 @@ export function OperationalTable<T>({
               aria-label={onRowClick ? `Open ${getRowKey(row)}` : undefined}
             >
               {columns.map((col) => (
-                <td key={col.key} className={`px-4 py-3 text-slate-200 ${col.className ?? ''}`}>
+                <td key={col.key} className={`px-4 py-3 text-foreground ${col.className ?? ''}`}>
                   {col.render(row)}
                 </td>
               ))}

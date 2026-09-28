@@ -117,17 +117,15 @@ describe('Offline Synchronization & Store-and-Forward Flow (A8)', () => {
     const user = userEvent.setup();
     renderWithProviders(<ControlTowerPage />);
 
-    await waitFor(() => {
-      expect(screen.getByText('Control Tower')).toBeInTheDocument();
+    // Wait for page to finish loading
+    const blackoutButtons = await screen.findAllByRole('button', {
+      name: /simulate antarctic blackout/i,
     });
 
     // Verify initial ONLINE posture
     expect(screen.getAllByText('ONLINE').length).toBeGreaterThan(0);
 
     // Toggle blackout simulation
-    const blackoutButtons = screen.getAllByRole('button', {
-      name: /simulate antarctic blackout/i,
-    });
     expect(blackoutButtons.length).toBeGreaterThan(0);
     await user.click(blackoutButtons[0]);
 
@@ -144,14 +142,11 @@ describe('Offline Synchronization & Store-and-Forward Flow (A8)', () => {
     const user = userEvent.setup();
     renderWithProviders(<ControlTowerPage />);
 
-    await waitFor(() => {
-      expect(screen.getByText('Control Tower')).toBeInTheDocument();
-    });
-
     // 1. Enable Simulated Blackout
-    const blackoutBtn = screen.getAllByRole('button', {
+    const blackoutButtons = await screen.findAllByRole('button', {
       name: /simulate antarctic blackout/i,
-    })[0];
+    });
+    const blackoutBtn = blackoutButtons[0];
     await user.click(blackoutBtn);
 
     await waitFor(() => {
@@ -251,9 +246,10 @@ describe('Offline Synchronization & Store-and-Forward Flow (A8)', () => {
     renderWithProviders(<ControlTowerPage />);
 
     // Enable blackout
-    const blackoutBtn = screen.getAllByRole('button', {
+    const blackoutButtons = await screen.findAllByRole('button', {
       name: /simulate antarctic blackout/i,
-    })[0];
+    });
+    const blackoutBtn = blackoutButtons[0];
     await user.click(blackoutBtn);
 
     // Acknowledge incident

@@ -10,11 +10,11 @@ export function LoadingSkeleton({ lines = 5, className = '' }: Props) {
         <div key={i} className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-2">
             <div
-              className="h-4 bg-slate-800 rounded"
+              className="h-4 bg-[var(--border-color)] rounded opacity-60"
               style={{ width: `${60 + ((i * 17) % 40)}%` }}
             />
           </div>
-          <div className="h-4 w-16 bg-slate-800 rounded" />
+          <div className="h-4 w-16 bg-[var(--border-color)] rounded opacity-60" />
         </div>
       ))}
     </div>

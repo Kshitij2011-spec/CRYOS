@@ -14,12 +14,12 @@ export function ErrorDisplay({ error, title = 'Request failed' }: Props) {
   return (
     <div
       role="alert"
-      className="flex items-start gap-3 p-4 rounded-lg bg-rose-950/40 border border-rose-800/60"
+      className="flex items-start gap-3 p-4 rounded-lg bg-rose-50 border border-rose-200 dark:bg-rose-950/40 dark:border-rose-800/60"
     >
-      <AlertTriangle className="w-5 h-5 text-rose-400 mt-0.5 shrink-0" aria-hidden="true" />
+      <AlertTriangle className="w-5 h-5 text-rose-600 mt-0.5 shrink-0 dark:text-rose-400" aria-hidden="true" />
       <div>
-        <p className="text-rose-300 font-medium text-sm">{title}</p>
-        <p className="text-rose-400 text-sm mt-0.5">{msg}</p>
+        <p className="text-rose-700 font-medium text-sm dark:text-rose-300">{title}</p>
+        <p className="text-rose-600 text-sm mt-0.5 dark:text-rose-400">{msg}</p>
         {code && (
           <p className="text-rose-500 text-xs font-mono mt-1">code: {code}</p>
         )}

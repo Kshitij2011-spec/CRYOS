@@ -67,25 +67,25 @@ export function ConfirmDialog({
         aria-hidden="true"
       />
       {/* Dialog */}
-      <div className="relative z-10 w-full max-w-md mx-4 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-6">
+      <div className="relative z-10 w-full max-w-md mx-4 bg-surface border border-border rounded-xl shadow-2xl p-6">
         <button
           type="button"
           onClick={handleClose}
-          className="absolute top-4 right-4 text-slate-500 hover:text-slate-300 transition-colors"
+          className="absolute top-4 right-4 text-foreground-muted hover:text-foreground transition-colors"
           aria-label="Close dialog"
         >
           <X className="w-4 h-4" />
         </button>
-        <h2 id="confirm-title" className="text-slate-100 font-semibold text-lg mb-2">
+        <h2 id="confirm-title" className="text-foreground font-semibold text-lg mb-2">
           {title}
         </h2>
-        <p className="text-slate-400 text-sm mb-6">{message}</p>
+        <p className="text-foreground-secondary text-sm mb-6">{message}</p>
         <div className="flex gap-3 justify-end">
           <button
             type="button"
             onClick={handleClose}
             disabled={isLoading}
-            className="px-4 py-2 rounded-lg text-sm text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors disabled:opacity-50"
+            className="px-4 py-2 rounded-lg text-sm text-foreground bg-surface-elevated hover:bg-surface-muted border border-border transition-colors disabled:opacity-50"
           >
             Cancel
           </button>

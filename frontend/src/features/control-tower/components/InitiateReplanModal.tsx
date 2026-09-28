@@ -80,21 +80,21 @@ export function InitiateReplanModal({
       aria-labelledby="initiate-replan-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
     >
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div className="w-full max-w-lg bg-surface border border-border rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Modal Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-border bg-surface-elevated flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-950/50 border border-amber-800/60 text-amber-400">
+            <div className="p-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 dark:bg-amber-950/50 dark:border-amber-800/60 dark:text-amber-400">
               <RotateCcw className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 id="initiate-replan-title" className="text-base font-bold text-slate-100">
+                <h3 id="initiate-replan-title" className="text-base font-bold text-foreground">
                   Initiate Operational Replan
                 </h3>
                 <ProvenanceTag provenance="ADVISORY" />
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-foreground-secondary mt-0.5">
                 Explicit human request for deterministic mitigation option generation
               </p>
             </div>
@@ -102,7 +102,7 @@ export function InitiateReplanModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
+            className="p-1 rounded text-foreground-muted hover:text-foreground hover:bg-surface-muted transition-colors"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -113,20 +113,20 @@ export function InitiateReplanModal({
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           {/* Target Context */}
           {(missionCode || constraintCode) && (
-            <div className="p-3 rounded-lg bg-slate-950/50 border border-slate-800 text-xs space-y-1">
-              <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">
+            <div className="p-3 rounded-lg bg-surface-muted border border-border text-xs space-y-1">
+              <span className="text-[11px] font-mono text-foreground-muted uppercase tracking-wider block">
                 Target Disruption Context:
               </span>
               {missionCode && (
-                <div className="flex items-center gap-2 text-slate-200">
-                  <span className="text-slate-400">Mission:</span>
+                <div className="flex items-center gap-2 text-foreground">
+                  <span className="text-foreground-muted">Mission:</span>
                   <EntityCode code={missionCode} />
-                  {missionTitle && <span className="text-slate-300 font-sans truncate">— {missionTitle}</span>}
+                  {missionTitle && <span className="text-foreground-secondary font-sans truncate">— {missionTitle}</span>}
                 </div>
               )}
               {constraintCode && (
-                <div className="flex items-center gap-2 text-amber-300">
-                  <span className="text-slate-400">Violated Constraint:</span>
+                <div className="flex items-center gap-2 text-amber-600 dark:text-amber-300">
+                  <span className="text-foreground-muted">Violated Constraint:</span>
                   <span className="font-mono font-semibold">{constraintCode}</span>
                 </div>
               )}
@@ -137,7 +137,7 @@ export function InitiateReplanModal({
           <div>
             <label
               htmlFor="replan-reason-input"
-              className="block text-xs font-mono font-medium text-slate-300 uppercase tracking-wider mb-1.5"
+              className="block text-xs font-mono font-medium text-foreground uppercase tracking-wider mb-1.5"
             >
               Operational Justification / Disruption Summary *
             </label>
@@ -148,7 +148,7 @@ export function InitiateReplanModal({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Detail why operational replanning is requested and what disruption triggered this..."
-              className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 font-sans"
+              className="w-full px-3 py-2 text-xs bg-surface border border-border rounded-lg text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-accent font-sans"
               required
             />
           </div>
@@ -156,19 +156,19 @@ export function InitiateReplanModal({
           {error && (
             <div
               data-testid="initiate-replan-error"
-              className="p-3 rounded bg-rose-950/30 border border-rose-900/60 text-xs text-rose-300 flex items-start gap-2"
+              className="p-3 rounded bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-950/30 dark:border-rose-900/60 dark:text-rose-300 text-xs flex items-start gap-2"
             >
-              <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Modal Actions */}
-          <div className="pt-2 flex items-center justify-end gap-3 border-t border-slate-800">
+          <div className="pt-2 flex items-center justify-end gap-3 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-mono text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+              className="px-4 py-2 text-xs font-mono text-foreground bg-surface-elevated hover:bg-surface-muted border border-border rounded-lg transition-colors"
             >
               Cancel
             </button>
@@ -176,7 +176,7 @@ export function InitiateReplanModal({
               type="submit"
               data-testid="submit-initiate-replan"
               disabled={initiateMutation.isPending}
-              className="px-4 py-2 text-xs font-mono font-semibold bg-amber-600 hover:bg-amber-500 text-slate-950 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+              className="px-4 py-2 text-xs font-mono font-semibold bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
             >
               {initiateMutation.isPending ? (
                 <>

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { AlertOctagon, Plus, Search, Filter } from 'lucide-react';
 import { PageHeader } from '../../components/shared/PageHeader';
+import { AutoRefreshIndicator } from '../../components/shared/AutoRefreshIndicator';
 import { EntityCode } from '../../components/shared/EntityCode';
 import { StatusBadge } from '../../components/shared/StatusBadge';
 import { ProvenanceTag } from '../../components/shared/ProvenanceTag';
@@ -46,6 +47,8 @@ export function IncidentsPage() {
 
   const {
     data: incidents = [],
+    dataUpdatedAt,
+    isFetching,
     isLoading,
     error,
     refetch,
@@ -71,11 +74,12 @@ export function IncidentsPage() {
           subtitle="Operational exception containment, resource impact isolation, and audit journal"
           actions={
             <div className="flex items-center gap-3">
-              <span className="text-slate-400 text-xs font-mono">{filteredIncidents.length} incidents</span>
+              <AutoRefreshIndicator dataUpdatedAt={dataUpdatedAt} intervalSeconds={25} isFetching={isFetching} />
+              <span className="text-slate-400 text-xs">{filteredIncidents.length} incidents</span>
               <button
                 type="button"
                 onClick={() => setCreateModalOpen(true)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-mono font-medium shadow transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-semibold shadow transition-colors"
               >
                 <Plus className="w-4 h-4" aria-hidden="true" />
                 Declare Incident
@@ -86,28 +90,28 @@ export function IncidentsPage() {
       </div>
 
       {/* Control Bar: Filters & Search */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-slate-900/40 p-4 rounded-lg border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-surface p-4 rounded-lg border border-border">
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[200px] max-w-xs">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
+            <Search className="w-4 h-4 text-foreground-muted absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
             <input
               type="search"
               placeholder="Search by code, title, type..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded-lg pl-9 pr-4 py-2 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-cyan-500 transition-colors"
               aria-label="Search incidents"
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-slate-500" aria-hidden="true" />
+            <Filter className="w-4 h-4 text-foreground-muted" aria-hidden="true" />
             <label htmlFor="inc-severity-filter" className="sr-only">Filter by Severity</label>
             <select
               id="inc-severity-filter"
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value as IncidentSeverity | 'ALL')}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-cyan-500 transition-colors"
             >
               {SEVERITY_OPTIONS.map((s) => (
                 <option key={s} value={s}>
@@ -123,7 +127,7 @@ export function IncidentsPage() {
               id="inc-status-filter"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as IncidentStatus | 'ALL')}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-cyan-500 transition-colors"
             >
               {STATUS_OPTIONS.map((st) => (
                 <option key={st} value={st}>
@@ -134,7 +138,7 @@ export function IncidentsPage() {
           </div>
         </div>
 
-        <span className="text-xs font-mono text-slate-400 self-center">
+        <span className="text-xs text-foreground-secondary self-center">
           Showing {filteredIncidents.length} incident{filteredIncidents.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -165,9 +169,9 @@ export function IncidentsPage() {
       )}
 
       {!isLoading && !error && filteredIncidents.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900/20">
+        <div className="overflow-x-auto rounded-lg border border-border bg-surface">
           <table className="w-full text-left text-sm" role="table" aria-label="Incidents table">
-            <thead className="bg-slate-900 font-mono text-xs text-slate-400 uppercase tracking-wider border-b border-slate-800">
+            <thead className="bg-surface-muted text-xs font-semibold text-foreground-secondary uppercase tracking-[0.05em] border-b border-border">
               <tr>
                 <th className="px-4 py-3">Incident Code</th>
                 <th className="px-4 py-3">Title</th>
@@ -180,16 +184,16 @@ export function IncidentsPage() {
                 <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono text-xs">
+            <tbody className="divide-y divide-border/60 text-sm">
               {filteredIncidents.map((inc: Incident) => (
                 <tr
                   key={inc.id}
-                  className="hover:bg-slate-800/40 transition-colors"
+                  className="hover:bg-surface-elevated transition-colors"
                 >
-                  <td className="px-4 py-3 font-semibold text-slate-200">
+                  <td className="px-4 py-3 font-semibold text-foreground">
                     <EntityCode code={inc.code} />
                   </td>
-                  <td className="px-4 py-3 font-sans font-medium text-slate-100 max-w-[220px] truncate" title={inc.title}>
+                  <td className="px-4 py-3 font-sans font-medium text-foreground max-w-[220px] truncate" title={inc.title}>
                     {inc.title}
                   </td>
                   <td className="px-4 py-3">
@@ -197,12 +201,12 @@ export function IncidentsPage() {
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span
-                      className={`inline-block px-1.5 py-0.5 rounded text-[11px] font-bold ${
+                      className={`inline-block px-1.5 py-0.5 rounded text-[11px] font-bold border ${
                         inc.priority === 1
-                          ? 'bg-rose-900/60 text-rose-200'
+                          ? 'bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-900/60 dark:text-rose-200'
                           : inc.priority === 2
-                          ? 'bg-amber-900/50 text-amber-300'
-                          : 'bg-slate-800 text-slate-400'
+                          ? 'bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-900/50 dark:text-amber-300'
+                          : 'bg-surface-muted text-foreground-secondary border-border'
                       }`}
                     >
                       P{inc.priority}
@@ -211,10 +215,10 @@ export function IncidentsPage() {
                   <td className="px-4 py-3">
                     <StatusBadge status={inc.status} />
                   </td>
-                  <td className="px-4 py-3 text-slate-400">
+                  <td className="px-4 py-3 text-foreground-secondary">
                     {inc.incident_type}
                   </td>
-                  <td className="px-4 py-3 text-slate-400 whitespace-nowrap">
+                  <td className="px-4 py-3 text-foreground-secondary whitespace-nowrap">
                     {new Date(inc.detected_at).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3">
@@ -224,7 +228,7 @@ export function IncidentsPage() {
                     <button
                       type="button"
                       onClick={() => setSelectedIncident(inc)}
-                      className="px-3 py-1 rounded text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition-colors"
+                      className="px-3 py-1 rounded text-xs bg-surface-elevated hover:bg-surface-muted text-foreground border border-border transition-colors font-medium"
                       aria-label={`Inspect ${inc.code}`}
                     >
                       Inspect

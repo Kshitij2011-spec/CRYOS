@@ -82,17 +82,17 @@ export function IncidentEscalationBanner({
   return (
     <section
       aria-label="Incident Escalation Context"
-      className="rounded-lg bg-gradient-to-r from-rose-950/50 via-slate-900 to-slate-950 border border-rose-800/60 shadow-lg overflow-hidden"
+      className="rounded-lg bg-gradient-to-r from-rose-500/10 via-surface to-surface-elevated border border-rose-300 dark:border-rose-800/60 shadow-md overflow-hidden"
     >
       {/* Banner Header */}
-      <div className="p-4 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="p-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-start sm:items-center gap-3">
-          <div className="p-2 rounded-lg bg-rose-950/80 border border-rose-700/60 text-rose-400 mt-0.5 sm:mt-0">
+          <div className="p-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/80 dark:border-rose-700/60 dark:text-rose-400 mt-0.5 sm:mt-0">
             <AlertOctagon className="w-5 h-5" aria-hidden="true" />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-rose-400 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-rose-700 dark:text-rose-400 uppercase tracking-wider">
                 Incident Escalation Context
               </span>
               <EntityCode code={incidentContext.incident_code} />
@@ -100,7 +100,7 @@ export function IncidentEscalationBanner({
               <StatusBadge status={incidentContext.status} />
               <ProvenanceTag provenance="SYNTHETIC_DEMO" />
             </div>
-            <h2 className="text-sm sm:text-base font-semibold text-slate-100 mt-1">
+            <h2 className="text-sm sm:text-base font-semibold text-foreground mt-1">
               {incidentContext.title}
             </h2>
           </div>
@@ -120,7 +120,7 @@ export function IncidentEscalationBanner({
             <button
               type="button"
               onClick={onDismiss}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors"
+              className="p-1.5 rounded-lg text-foreground-muted hover:text-foreground hover:bg-surface-elevated transition-colors"
               aria-label="Dismiss incident escalation context"
             >
               <X className="w-4 h-4" aria-hidden="true" />
@@ -133,17 +133,17 @@ export function IncidentEscalationBanner({
       <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
         {/* Column 1: Blast Radius & Location */}
         <div className="space-y-2">
-          <div className="flex items-center gap-1.5 text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
-            <ShieldAlert className="w-3.5 h-3.5 text-rose-400" aria-hidden="true" />
+          <div className="flex items-center gap-1.5 text-foreground-muted font-semibold text-[11px] uppercase tracking-wider">
+            <ShieldAlert className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" aria-hidden="true" />
             Propagation & Blast Radius
             <ProvenanceTag provenance="DERIVED" className="ml-auto" />
           </div>
-          <p className="text-slate-300 leading-relaxed bg-slate-950/60 p-2.5 rounded border border-slate-800/80">
+          <p className="text-foreground-secondary leading-relaxed bg-surface-muted p-2.5 rounded border border-border">
             {incidentContext.propagation_summary}
           </p>
-          <div className="text-[11px] text-slate-400 flex items-center gap-1">
-            <span className="text-slate-500">Location:</span>
-            <span className="text-slate-200 font-semibold">
+          <div className="text-[11px] text-foreground-muted flex items-center gap-1">
+            <span className="text-foreground-muted">Location:</span>
+            <span className="text-foreground font-semibold">
               {incidentContext.location_name ?? incidentContext.location_id ?? 'Polar Operations Area'}
             </span>
           </div>
@@ -151,26 +151,26 @@ export function IncidentEscalationBanner({
 
         {/* Column 2: Impacted Missions */}
         <div className="space-y-2">
-          <div className="flex items-center gap-1.5 text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
-            <Target className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
+          <div className="flex items-center gap-1.5 text-foreground-muted font-semibold text-[11px] uppercase tracking-wider">
+            <Target className="w-3.5 h-3.5 text-amber-500" aria-hidden="true" />
             Impacted Missions ({incidentContext.affected_missions.length})
             <ProvenanceTag provenance="DERIVED" className="ml-auto" />
           </div>
           <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
             {incidentContext.affected_missions.length === 0 ? (
-              <p className="text-slate-500 italic bg-slate-950/40 p-2 rounded border border-slate-800/60">
+              <p className="text-foreground-muted italic bg-surface-muted p-2 rounded border border-border">
                 No active missions directly interrupted in initial blast radius.
               </p>
             ) : (
               incidentContext.affected_missions.map((m, idx) => (
                 <div
                   key={idx}
-                  className="p-2 rounded bg-slate-950/70 border border-slate-800 flex items-center justify-between"
+                  className="p-2 rounded bg-surface border border-border flex items-center justify-between shadow-sm"
                 >
-                  <span className="text-amber-300 font-bold">
+                  <span className="text-amber-700 dark:text-amber-300 font-bold">
                     {String(m.code ?? m.mission_code ?? 'MSN')}
                   </span>
-                  <span className="text-slate-300 truncate max-w-[160px]" title={String(m.title ?? '')}>
+                  <span className="text-foreground-secondary truncate max-w-[160px]" title={String(m.title ?? '')}>
                     {String(m.title ?? 'Operational Mission')}
                   </span>
                 </div>
@@ -181,24 +181,24 @@ export function IncidentEscalationBanner({
 
         {/* Column 3: Impacted Constraints & Correlation */}
         <div className="space-y-2">
-          <div className="flex items-center gap-1.5 text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
-            <Link2 className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+          <div className="flex items-center gap-1.5 text-foreground-muted font-semibold text-[11px] uppercase tracking-wider">
+            <Link2 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
             Threatened Constraints & Linkage
             <ProvenanceTag provenance="ADVISORY" className="ml-auto" />
           </div>
           <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
             {incidentContext.affected_constraints.length === 0 ? (
-              <p className="text-slate-500 italic bg-slate-950/40 p-2 rounded border border-slate-800/60">
+              <p className="text-foreground-muted italic bg-surface-muted p-2 rounded border border-border">
                 No active hard constraints in terminal breach.
               </p>
             ) : (
               incidentContext.affected_constraints.map((c, idx) => (
                 <div
                   key={idx}
-                  className="p-1.5 rounded bg-slate-950/70 border border-rose-900/40 flex items-center justify-between text-[11px]"
+                  className="p-1.5 rounded bg-surface border border-rose-200 dark:border-rose-900/40 flex items-center justify-between text-[11px]"
                 >
-                  <span className="text-rose-300 font-bold">{String(c.code ?? 'CST')}</span>
-                  <span className="text-slate-400 truncate max-w-[140px]" title={String(c.name ?? c.reason ?? '')}>
+                  <span className="text-rose-700 dark:text-rose-300 font-bold">{String(c.code ?? 'CST')}</span>
+                  <span className="text-foreground-muted truncate max-w-[140px]" title={String(c.name ?? c.reason ?? '')}>
                     {String(c.name ?? c.reason ?? 'Safety Invariant')}
                   </span>
                 </div>
@@ -206,8 +206,8 @@ export function IncidentEscalationBanner({
             )}
           </div>
           {incidentContext.correlation_id && (
-            <div className="pt-1 text-[10px] text-slate-500 truncate" title={incidentContext.correlation_id}>
-              Trace: <span className="text-slate-400">{incidentContext.correlation_id}</span>
+            <div className="pt-1 text-[10px] text-foreground-muted truncate" title={incidentContext.correlation_id}>
+              Trace: <span className="text-foreground-secondary">{incidentContext.correlation_id}</span>
             </div>
           )}
         </div>

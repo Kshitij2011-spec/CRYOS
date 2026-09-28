@@ -10,7 +10,7 @@ interface Props {
 export function IncidentTimeline({ entries, isLoading }: Props) {
   if (isLoading) {
     return (
-      <div className="p-6 text-center text-slate-500 font-mono text-xs">
+      <div className="p-6 text-center text-foreground-muted text-sm">
         Loading incident timeline...
       </div>
     );
@@ -18,32 +18,32 @@ export function IncidentTimeline({ entries, isLoading }: Props) {
 
   if (entries.length === 0) {
     return (
-      <div className="p-6 text-center text-slate-500 font-mono text-xs border border-slate-800 rounded bg-slate-900/30">
+      <div className="p-6 text-center text-foreground-muted text-sm border border-border rounded bg-surface-muted">
         No timeline entries recorded for this incident.
       </div>
     );
   }
 
   return (
-    <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+    <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
       {entries.map((entry) => (
-        <div key={entry.id} className="relative group text-xs font-mono">
-          <div className="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-slate-950 border-2 border-rose-500 flex items-center justify-center">
-            <div className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+        <div key={entry.id} className="relative group text-sm">
+          <div className="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-surface border-2 border-rose-500 flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-rose-600 dark:bg-rose-400" />
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-900/80 border border-slate-800 space-y-1">
+          <div className="p-3 rounded-lg bg-surface-elevated border border-border space-y-1">
             <div className="flex items-center justify-between gap-2">
-              <span className="font-semibold text-rose-300">{entry.event_type}</span>
-              <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+              <span className="font-semibold text-rose-700 dark:text-rose-300">{entry.event_type}</span>
+              <div className="flex items-center gap-1.5 text-foreground-muted text-[11px]">
                 <Clock className="w-3 h-3" />
                 <span>{new Date(entry.timestamp).toLocaleString()}</span>
               </div>
             </div>
 
-            <p className="text-slate-300">{entry.summary}</p>
+            <p className="text-foreground">{entry.summary}</p>
 
-            <div className="pt-2 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-800/60">
+            <div className="pt-2 flex items-center justify-between text-[11px] text-foreground-muted border-t border-border/60">
               <span>Actor: {entry.actor ?? 'SYSTEM'}</span>
               <ProvenanceTag provenance={entry.provenance} />
             </div>

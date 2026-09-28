@@ -5,6 +5,7 @@ import {
   Clock,
   ArrowUpRight,
   Sparkles,
+  CheckCircle2,
 } from 'lucide-react';
 import { useDecisionQueue } from '../hooks/useControlTower';
 import { StatusBadge } from '../../../components/shared/StatusBadge';
@@ -12,7 +13,6 @@ import { EntityCode } from '../../../components/shared/EntityCode';
 import { ProvenanceTag } from '../../../components/shared/ProvenanceTag';
 import { LoadingSkeleton } from '../../../components/shared/LoadingSkeleton';
 import { ErrorDisplay } from '../../../components/shared/ErrorDisplay';
-import { EmptyState } from '../../../components/shared/EmptyState';
 import { ApprovalModal } from './ApprovalModal';
 import type {
   DecisionApprovalItem,
@@ -54,24 +54,23 @@ export function DecisionQueuePanel({
   return (
     <section
       aria-labelledby="decision-queue-heading"
-      className="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-sm"
+      className="bg-surface border border-border rounded-lg overflow-hidden shadow-sm"
     >
       {/* Header */}
-      <div className="p-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 bg-slate-950/40">
+      <div className="p-3.5 sm:p-4 border-b border-border flex flex-wrap items-center justify-between gap-3 bg-surface-elevated">
         <div className="flex items-center gap-2.5">
-          <ShieldAlert className="w-5 h-5 text-amber-400" aria-hidden="true" />
+          <ShieldAlert className="w-5 h-5 text-amber-500 dark:text-amber-400" aria-hidden="true" />
           <div>
+            <span className="eyebrow">DECISIONS</span>
             <h2
               id="decision-queue-heading"
-              className="text-base font-bold text-slate-100 tracking-wide flex items-center gap-2"
+              className="text-base font-bold text-foreground tracking-wide flex items-center gap-2"
             >
-              <span>Decision Queue & Human Governance</span>
-              <span className="text-xs font-mono text-slate-400 font-normal">
-                (Awaiting Operator Decision)
-              </span>
+              <span>Decision Queue</span>
+              <span className="sr-only">Decision Queue & Human Governance</span>
             </h2>
-            <p className="text-xs text-slate-400">
-              Operational replans, candidate recommendations, and human approval gates
+            <p className="text-xs text-foreground-secondary">
+              Requires operator review
             </p>
           </div>
         </div>
@@ -82,28 +81,30 @@ export function DecisionQueuePanel({
       </div>
 
       {/* Tabs */}
-      <div className="px-4 border-b border-slate-800 bg-slate-950/20">
-        <div role="tablist" aria-label="Decision queue views" className="flex gap-2">
+      <div className="px-3.5 border-b border-border bg-surface-muted/30">
+        <div role="tablist" aria-label="Decision queue views" className="flex gap-1.5">
           <button
             type="button"
             role="tab"
             id="tab-approvals"
+            aria-label="Pending Approvals"
             aria-selected={activeTab === 'approvals'}
             aria-controls="tabpanel-approvals"
             data-testid="tab-approvals"
             onClick={() => setActiveTab('approvals')}
-            className={`py-2.5 px-3 text-xs font-mono font-medium border-b-2 transition-colors flex items-center gap-2 focus:outline-none focus:ring-1 focus:ring-cyan-500 ${
+            className={`py-2 px-2.5 text-xs font-mono font-medium border-b-2 transition-colors flex items-center gap-1.5 focus:outline-none focus:ring-1 focus:ring-accent ${
               activeTab === 'approvals'
-                ? 'border-cyan-500 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                ? 'border-accent text-accent font-semibold'
+                : 'border-transparent text-foreground-muted hover:text-foreground hover:border-border'
             }`}
           >
-            <span>Pending Approvals</span>
+            <span>Pending</span>
+            <span className="sr-only"> Approvals</span>
             <span
-              className={`px-1.5 py-0.2 rounded-full text-[11px] ${
+              className={`px-1.5 py-0.2 rounded-full text-[10px] ${
                 pendingApprovals.length > 0
-                  ? 'bg-amber-900/60 text-amber-300 font-bold'
-                  : 'bg-slate-800 text-slate-400'
+                  ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 font-bold'
+                  : 'bg-surface-muted text-foreground-muted'
               }`}
             >
               {pendingApprovals.length}
@@ -118,18 +119,18 @@ export function DecisionQueuePanel({
             aria-controls="tabpanel-recommendations"
             data-testid="tab-recommendations"
             onClick={() => setActiveTab('recommendations')}
-            className={`py-2.5 px-3 text-xs font-mono font-medium border-b-2 transition-colors flex items-center gap-2 focus:outline-none focus:ring-1 focus:ring-cyan-500 ${
+            className={`py-2 px-2.5 text-xs font-mono font-medium border-b-2 transition-colors flex items-center gap-1.5 focus:outline-none focus:ring-1 focus:ring-accent ${
               activeTab === 'recommendations'
-                ? 'border-cyan-500 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                ? 'border-accent text-accent font-semibold'
+                : 'border-transparent text-foreground-muted hover:text-foreground hover:border-border'
             }`}
           >
             <span>Recommendations</span>
             <span
-              className={`px-1.5 py-0.2 rounded-full text-[11px] ${
+              className={`px-1.5 py-0.2 rounded-full text-[10px] ${
                 pendingRecommendations.length > 0
-                  ? 'bg-sky-900/60 text-sky-300 font-bold'
-                  : 'bg-slate-800 text-slate-400'
+                  ? 'bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-bold'
+                  : 'bg-surface-muted text-foreground-muted'
               }`}
             >
               {pendingRecommendations.length}
@@ -144,18 +145,18 @@ export function DecisionQueuePanel({
             aria-controls="tabpanel-replans"
             data-testid="tab-replans"
             onClick={() => setActiveTab('replans')}
-            className={`py-2.5 px-3 text-xs font-mono font-medium border-b-2 transition-colors flex items-center gap-2 focus:outline-none focus:ring-1 focus:ring-cyan-500 ${
+            className={`py-2 px-2.5 text-xs font-mono font-medium border-b-2 transition-colors flex items-center gap-1.5 focus:outline-none focus:ring-1 focus:ring-accent ${
               activeTab === 'replans'
-                ? 'border-cyan-500 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                ? 'border-accent text-accent font-semibold'
+                : 'border-transparent text-foreground-muted hover:text-foreground hover:border-border'
             }`}
           >
             <span>Replans</span>
             <span
-              className={`px-1.5 py-0.2 rounded-full text-[11px] ${
+              className={`px-1.5 py-0.2 rounded-full text-[10px] ${
                 pendingReplans.length > 0
-                  ? 'bg-slate-700 text-slate-200 font-bold'
-                  : 'bg-slate-800 text-slate-400'
+                  ? 'bg-surface-elevated text-foreground font-bold'
+                  : 'bg-surface-muted text-foreground-muted'
               }`}
             >
               {pendingReplans.length}
@@ -165,7 +166,7 @@ export function DecisionQueuePanel({
       </div>
 
       {/* Panel Content */}
-      <div className="p-4">
+      <div className="p-3.5 sm:p-4">
         {/* Loading State */}
         {isLoading && (
           <div aria-busy="true" className="space-y-3">
@@ -191,30 +192,34 @@ export function DecisionQueuePanel({
                 role="tabpanel"
                 id="tabpanel-approvals"
                 aria-labelledby="tab-approvals"
-                className="space-y-3"
+                className="space-y-2.5"
               >
                 {pendingApprovals.length === 0 ? (
-                  <EmptyState
-                    title="No pending approvals"
-                    message="There are no human approval gates currently pending operator review for this expedition."
-                  />
+                  <div className="py-3.5 px-4 text-center rounded-lg bg-surface-muted/40 border border-dashed border-border/80 flex items-center justify-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" aria-hidden="true" />
+                    <div className="text-left">
+                      <p className="text-xs font-semibold text-foreground">No pending approvals</p>
+                      <p className="text-[11px] text-foreground-muted">Nothing requires operator approval right now.</p>
+                      <span className="sr-only">There are no operator approvals currently waiting for review.</span>
+                    </div>
+                  </div>
                 ) : (
                   pendingApprovals.map((item: DecisionApprovalItem) => (
                     <div
                       key={item.approval_id}
-                      className="p-4 bg-slate-950/40 border border-slate-800 rounded-lg hover:border-slate-700 transition-colors space-y-3"
+                      className="p-3 sm:p-3.5 bg-surface border border-border rounded-lg hover:border-border-strong transition-colors space-y-2.5"
                     >
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono text-cyan-400 font-semibold">
+                            <span className="text-xs font-mono text-accent font-semibold">
                               APPROVAL
                             </span>
-                            <h3 className="text-sm font-semibold text-slate-100">
+                            <h3 className="text-sm font-semibold text-foreground">
                               {item.recommendation_title}
                             </h3>
                           </div>
-                          <div className="flex items-center gap-2 text-xs font-mono text-slate-400 mt-1">
+                          <div className="flex items-center gap-2 text-xs font-mono text-foreground-muted mt-0.5">
                             <span>Role Required: {item.required_approver_role}</span>
                             <span>•</span>
                             <span>Options: {item.available_options_count}</span>
@@ -226,7 +231,7 @@ export function DecisionQueuePanel({
                           <button
                             type="button"
                             onClick={() => handleOpenReview(item.recommendation_id)}
-                            className="px-3 py-1 text-xs font-medium text-cyan-300 bg-cyan-950/60 border border-cyan-800 hover:bg-cyan-900/60 rounded flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                            className="px-2.5 py-1 text-xs font-medium text-accent bg-accent/10 border border-accent/30 hover:bg-accent/20 rounded flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-accent"
                           >
                             <span>Review & Decide</span>
                             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -234,22 +239,22 @@ export function DecisionQueuePanel({
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-mono bg-slate-900/60 p-2.5 rounded border border-slate-800/80">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-xs font-mono bg-surface-muted p-2 rounded border border-border">
                         <div>
-                          <span className="text-slate-400">What Changed: </span>
-                          <span className="text-slate-200">{item.what_changed}</span>
+                          <span className="text-foreground-muted">What Changed: </span>
+                          <span className="text-foreground">{item.what_changed}</span>
                         </div>
                         <div>
-                          <span className="text-slate-400">Why It Matters: </span>
-                          <span className="text-slate-200">{item.why_it_matters}</span>
+                          <span className="text-foreground-muted">Why It Matters: </span>
+                          <span className="text-foreground">{item.why_it_matters}</span>
                         </div>
                         <div className="md:col-span-2">
-                          <span className="text-amber-400">Constraint Involved: </span>
-                          <span className="text-slate-300">{item.what_constraint_is_involved}</span>
+                          <span className="text-amber-500 dark:text-amber-400">Constraint Involved: </span>
+                          <span className="text-foreground-secondary">{item.what_constraint_is_involved}</span>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                      <div className="flex items-center justify-between text-[11px] font-mono text-foreground-muted pt-1 border-t border-border/60">
                         <span>Approval ID: {item.approval_id}</span>
                         <div className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
@@ -268,29 +273,32 @@ export function DecisionQueuePanel({
                 role="tabpanel"
                 id="tabpanel-recommendations"
                 aria-labelledby="tab-recommendations"
-                className="space-y-3"
+                className="space-y-2.5"
               >
                 {pendingRecommendations.length === 0 ? (
-                  <EmptyState
-                    title="No pending recommendations"
-                    message="There are no candidate operational recommendations requiring evaluation."
-                  />
+                  <div className="py-3.5 px-4 text-center rounded-lg bg-surface-muted/40 border border-dashed border-border/80 flex items-center justify-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-sky-500 shrink-0" aria-hidden="true" />
+                    <div className="text-left">
+                      <p className="text-xs font-semibold text-foreground">No pending recommendations</p>
+                      <p className="text-[11px] text-foreground-muted">No candidate recommendations requiring evaluation.</p>
+                    </div>
+                  </div>
                 ) : (
                   pendingRecommendations.map((item: DecisionRecommendationItem) => (
                     <div
                       key={item.recommendation_id}
-                      className="p-4 bg-slate-950/40 border border-slate-800 rounded-lg hover:border-slate-700 transition-colors space-y-3"
+                      className="p-3 sm:p-3.5 bg-surface border border-border rounded-lg hover:border-border-strong transition-colors space-y-2.5"
                     >
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-sky-400" />
-                            <h3 className="text-sm font-semibold text-slate-100">
+                            <Sparkles className="w-4 h-4 text-accent" />
+                            <h3 className="text-sm font-semibold text-foreground">
                               {item.title}
                             </h3>
                           </div>
                           {item.summary && (
-                            <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                            <p className="text-xs text-foreground-secondary mt-0.5 max-w-2xl leading-relaxed">
                               {item.summary}
                             </p>
                           )}
@@ -302,7 +310,7 @@ export function DecisionQueuePanel({
                           <button
                             type="button"
                             onClick={() => handleOpenReview(item.recommendation_id)}
-                            className="px-3 py-1 text-xs font-medium text-sky-300 bg-sky-950/60 border border-sky-800 hover:bg-sky-900/60 rounded flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                            className="px-2.5 py-1 text-xs font-medium text-accent bg-accent/10 border border-accent/30 hover:bg-accent/20 rounded flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-accent"
                           >
                             <span>Review Recommendation</span>
                             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -311,8 +319,8 @@ export function DecisionQueuePanel({
                       </div>
 
                       {item.rationale && item.rationale.length > 0 && (
-                        <div className="text-xs text-slate-300 bg-slate-900/60 p-2 rounded border border-slate-800/80">
-                          <span className="text-slate-400 font-mono block mb-1">Rationale:</span>
+                        <div className="text-xs text-foreground-secondary bg-surface-muted p-2 rounded border border-border">
+                          <span className="text-foreground-muted font-mono block mb-1">Rationale:</span>
                           <ul className="list-disc list-inside space-y-0.5">
                             {item.rationale.map((r, idx) => (
                               <li key={idx}>{r}</li>
@@ -321,10 +329,10 @@ export function DecisionQueuePanel({
                         </div>
                       )}
 
-                      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/60">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-foreground-muted pt-1 border-t border-border">
                         <span>Affected entities: {item.what_is_affected.length}</span>
                         <span>Proposed changes: {item.proposed_changes.length}</span>
-                        <div className="flex items-center gap-1 text-slate-500">
+                        <div className="flex items-center gap-1 text-foreground-muted">
                           <Clock className="w-3 h-3" />
                           <span>{new Date(item.created_at).toLocaleString()}</span>
                         </div>
@@ -341,46 +349,49 @@ export function DecisionQueuePanel({
                 role="tabpanel"
                 id="tabpanel-replans"
                 aria-labelledby="tab-replans"
-                className="space-y-3"
+                className="space-y-2.5"
               >
                 {pendingReplans.length === 0 ? (
-                  <EmptyState
-                    title="No pending replans"
-                    message="No active replanning workflows are currently processing or awaiting approval."
-                  />
+                  <div className="py-3.5 px-4 text-center rounded-lg bg-surface-muted/40 border border-dashed border-border/80 flex items-center justify-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" aria-hidden="true" />
+                    <div className="text-left">
+                      <p className="text-xs font-semibold text-foreground">No pending replans</p>
+                      <p className="text-[11px] text-foreground-muted">No active replanning workflows currently processing.</p>
+                    </div>
+                  </div>
                 ) : (
                   pendingReplans.map((item: DecisionReplanItem) => (
                     <div
                       key={item.replan_id}
-                      className="p-4 bg-slate-950/40 border border-slate-800 rounded-lg hover:border-slate-700 transition-colors space-y-3"
+                      className="p-3 sm:p-3.5 bg-surface border border-border rounded-lg hover:border-border-strong transition-colors space-y-2.5"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <GitPullRequest className="w-4 h-4 text-purple-400" />
+                          <GitPullRequest className="w-4 h-4 text-purple-500 dark:text-purple-400" />
                           <EntityCode code={item.replan_code} />
-                          <span className="text-xs font-mono text-slate-400">
+                          <span className="text-xs font-mono text-foreground-muted">
                             Mode: {item.trigger_mode}
                           </span>
                         </div>
                         <StatusBadge status={item.status} />
                       </div>
 
-                      <div className="text-xs text-slate-300 bg-slate-900/60 p-2.5 rounded border border-slate-800/80 space-y-1">
+                      <div className="text-xs text-foreground-secondary bg-surface-muted p-2 rounded border border-border space-y-1">
                         <div>
-                          <span className="text-slate-400 font-mono">What Changed: </span>
+                          <span className="text-foreground-muted font-mono">What Changed: </span>
                           <span>{item.what_changed}</span>
                         </div>
                         {item.trigger_reason && (
                           <div>
-                            <span className="text-slate-400 font-mono">Trigger: </span>
+                            <span className="text-foreground-muted font-mono">Trigger: </span>
                             <span>{item.trigger_reason}</span>
                           </div>
                         )}
                       </div>
 
-                      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800/60">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-foreground-muted pt-1 border-t border-border">
                         <span>Affected entities: {item.affected_entities_count}</span>
-                        <span className={item.violated_constraints_count > 0 ? 'text-amber-400' : ''}>
+                        <span className={item.violated_constraints_count > 0 ? 'text-amber-500 dark:text-amber-400' : ''}>
                           Violated constraints: {item.violated_constraints_count}
                         </span>
                         {onViewReplanOptions && (
@@ -388,13 +399,13 @@ export function DecisionQueuePanel({
                             type="button"
                             data-testid={`explore-replan-${item.replan_code.toLowerCase()}`}
                             onClick={() => onViewReplanOptions(item.replan_id)}
-                            className="px-2.5 py-1 text-xs font-medium text-sky-300 bg-sky-950/60 border border-sky-800 hover:bg-sky-900/60 rounded flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-sky-500 font-sans"
+                            className="px-2.5 py-1 text-xs font-medium text-accent bg-accent/10 border border-accent/30 hover:bg-accent/20 rounded flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-accent font-sans"
                           >
                             <span>Explore / Generate Options</span>
                             <ArrowUpRight className="w-3.5 h-3.5" />
                           </button>
                         )}
-                        <div className="flex items-center gap-1 text-slate-500">
+                        <div className="flex items-center gap-1 text-foreground-muted">
                           <Clock className="w-3 h-3" />
                           <span>{new Date(item.created_at).toLocaleString()}</span>
                         </div>

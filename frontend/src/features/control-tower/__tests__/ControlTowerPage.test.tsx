@@ -228,8 +228,8 @@ describe('ControlTowerPage', () => {
     // Wait for overview, context bar, and all child sections
     await waitFor(() => {
       expect(screen.getByText('Campaigns: 2')).toBeInTheDocument();
-      expect(screen.getByText('EXP-45')).toBeInTheDocument();
-      expect(screen.getByText('45th Indian Antarctic Expedition')).toBeInTheDocument();
+      expect(screen.getAllByText('EXP-45').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('45th Indian Antarctic Expedition').length).toBeGreaterThanOrEqual(1);
 
       // Mission Readiness Grid
       expect(screen.getByText('MSN-ICE-01')).toBeInTheDocument();

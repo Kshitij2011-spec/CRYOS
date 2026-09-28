@@ -1,25 +1,287 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /* ─── Light Theme (default) ─────────────────────────────────────────── */
   :root {
+    color-scheme: light;
+    --color-canvas:             #F4F8FB;
+    --color-surface:            #FFFFFF;
+    --color-surface-elevated:   #F8FAFC;
+    --color-surface-muted:      #EEF4F8;
+    --color-border:             #D6E1EA;
+    --color-border-strong:      #C3D1DD;
+    --color-foreground:         #10243A;
+    --color-foreground-secondary: #526579;
+    --color-foreground-muted:   #718196;
+    --color-primary:            #0EA5C6;
+    --color-primary-soft:       rgba(14, 165, 198, 0.12);
+    --color-focus:              #0EA5C6;
+
+    /* Legacy / existing variable compatibility aliases */
+    --bg-canvas:          var(--color-canvas);
+    --bg-surface:         var(--color-surface);
+    --bg-surface-elevated:var(--color-surface-elevated);
+    --bg-surface-inset:   var(--color-surface-muted);
+    --bg-surface-muted:   var(--color-surface-muted);
+    --border-color:       var(--color-border);
+    --border-strong:      var(--color-border-strong);
+    --text-primary:       var(--color-foreground);
+    --text-secondary:     var(--color-foreground-secondary);
+    --text-muted:         var(--color-foreground-muted);
+    --accent-primary:     var(--color-primary);
+    --accent-cyan:        var(--color-primary);
+    --accent-violet:      #6D5BD0;
+    --status-success:     #36A269;
+    --status-warning:     #E69320;
+    --status-critical:    #E23B45;
+    --status-info:        #2563EB;
+    --shadow-sm:          0 1px 3px rgba(16, 36, 58, 0.08), 0 1px 2px rgba(16, 36, 58, 0.04);
+    --shadow-md:          0 4px 12px rgba(16, 36, 58, 0.10), 0 2px 4px rgba(16, 36, 58, 0.05);
+  }
+
+  /* ─── Dark Theme ─────────────────────────────────────────────────────── */
+  .dark {
     color-scheme: dark;
+    --color-canvas:             #070B14;
+    --color-surface:            #0E1626;
+    --color-surface-elevated:   #111C2E;
+    --color-surface-muted:      #162235;
+    --color-border:             #243247;
+    --color-border-strong:      #33465E;
+    --color-foreground:         #F8FAFC;
+    --color-foreground-secondary: #CBD5E1;
+    --color-foreground-muted:   #94A3B8;
+    --color-primary:            #22D3EE;
+    --color-primary-soft:       rgba(34, 211, 238, 0.15);
+    --color-focus:              #22D3EE;
+
+    /* Legacy / existing variable compatibility aliases */
+    --bg-canvas:          var(--color-canvas);
+    --bg-surface:         var(--color-surface);
+    --bg-surface-elevated:var(--color-surface-elevated);
+    --bg-surface-inset:   var(--color-surface-muted);
+    --bg-surface-muted:   var(--color-surface-muted);
+    --border-color:       var(--color-border);
+    --border-strong:      var(--color-border-strong);
+    --text-primary:       var(--color-foreground);
+    --text-secondary:     var(--color-foreground-secondary);
+    --text-muted:         var(--color-foreground-muted);
+    --accent-primary:     var(--color-primary);
+    --accent-cyan:        var(--color-primary);
+    --accent-violet:      #8B7CF6;
+    --status-success:     #34D399;
+    --status-warning:     #F59E0B;
+    --status-critical:    #F43F5E;
+    --status-info:        #60A5FA;
+    --shadow-sm:          0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md:          0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ─── Base resets ────────────────────────────────────────────────────── */
+  html {
+    -webkit-text-size-adjust: 100%;
+    font-size: 16px;
   }
 
   body {
-    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    background-color: var(--color-canvas);
+    color: var(--color-foreground);
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.9375rem; /* 15px comfortable default */
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
 
-  * {
-    @apply border-slate-800;
+  /* Prevent theme flash */
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 0.12s;
+    transition-timing-function: ease;
   }
+
+  /* Typography base — headings always sans-serif */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Ensure inputs, selects, buttons inherit sans-serif */
+  input, select, textarea, button {
+    font-family: inherit;
+  }
+
+  /* Scrollbar styling */
+  :root {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-border-strong); }
 }
 
 @layer utilities {
-  .font-mono-code {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  /* ─── Semantic Typography Utilities ──────────────────────────────────── */
+
+  /* PAGE TITLE: Route-level heading. e.g. "Control Tower", "Cargo" */
+  .page-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.5rem;       /* 24px */
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-foreground);
   }
+
+  /* SECTION TITLE: Card/panel heading inside a page */
+  .section-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1rem;         /* 16px */
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    color: var(--color-foreground);
+  }
+
+  /* CARD TITLE: Within-card groupings */
+  .card-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.9375rem;    /* 15px */
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-foreground);
+  }
+
+  /* EYEBROW: Small overline above a title, e.g. domain category */
+  .eyebrow {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.6875rem;    /* 11px */
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-foreground-muted);
+  }
+
+  /* BODY TEXT: Default prose, tables, and list items */
+  .body-text {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.9375rem;    /* 15px */
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--color-foreground);
+  }
+
+  /* BODY TEXT SM: Secondary prose, descriptions */
+  .body-text-sm {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.8125rem;    /* 13px */
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-foreground-secondary);
+  }
+
+  /* META TEXT: Timestamps, row counts, footnotes */
+  .meta-text {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.75rem;      /* 12px */
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--color-foreground-muted);
+  }
+
+  /* DATA VALUE: KPI numbers, metric readings — tabular but not monospace */
+  .data-value {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-foreground);
+  }
+
+  /* ENTITY ID: Technical IDs, codes, IATA codes, checksums — intentionally monospace */
+  .entity-id {
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', monospace;
+    font-size: 0.75rem;      /* 12px */
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-foreground-secondary);
+  }
+
+  /* Numeric tabular utility */
+  .tabular-nums { font-variant-numeric: tabular-nums; }
+  .font-mono-code { font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace; }
+
+
+  /* Theme semantic surfaces */
+  .bg-canvas   { background-color: var(--color-canvas); }
+  .bg-surface  { background-color: var(--color-surface); }
+  .bg-surface-elevated { background-color: var(--color-surface-elevated); }
+  .bg-surface-muted    { background-color: var(--color-surface-muted); }
+  .bg-surface-inset    { background-color: var(--color-surface-muted); }
+
+  /* Theme semantic borders */
+  .border-border        { border-color: var(--color-border); }
+  .border-border-strong { border-color: var(--color-border-strong); }
+  .border-theme         { border-color: var(--color-border); }
+  .border-theme-strong  { border-color: var(--color-border-strong); }
+
+  /* Theme semantic text */
+  .text-foreground           { color: var(--color-foreground); }
+  .text-foreground-secondary { color: var(--color-foreground-secondary); }
+  .text-foreground-muted     { color: var(--color-foreground-muted); }
+  .text-primary              { color: var(--color-foreground); }
+  .text-secondary            { color: var(--color-foreground-secondary); }
+  .text-muted                { color: var(--color-foreground-muted); }
+
+  /* Accent */
+  .text-accent      { color: var(--accent-cyan); }
+  .border-accent    { border-color: var(--accent-cyan); }
+
+  /* Status colors */
+  .text-status-success  { color: var(--status-success); }
+  .text-status-warning  { color: var(--status-warning); }
+  .text-status-critical { color: var(--status-critical); }
+
+  /* Shadow utilities */
+  .shadow-theme-sm { box-shadow: var(--shadow-sm); }
+  .shadow-theme-md { box-shadow: var(--shadow-md); }
+
+  /* Animated pulse for status indicators */
+  .status-pulse {
+    animation: statusPulse 2s ease-in-out infinite;
+  }
+
+  /* Navigation active indicator */
+  .nav-active-bar {
+    position: relative;
+  }
+  .nav-active-bar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 25%;
+    bottom: 25%;
+    width: 2px;
+    border-radius: 1px;
+    background-color: var(--accent-cyan);
+  }
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }

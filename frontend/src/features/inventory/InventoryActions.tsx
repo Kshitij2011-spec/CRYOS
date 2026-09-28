@@ -167,8 +167,8 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
   };
 
   return (
-    <div className="p-4 rounded-lg bg-slate-900 border border-slate-800">
-      <div className="flex border-b border-slate-800 pb-2 mb-4 gap-1 overflow-x-auto text-xs font-mono">
+    <div className="p-4 rounded-lg bg-surface border border-border">
+      <div className="flex border-b border-border pb-2 mb-4 gap-1 overflow-x-auto text-sm">
         {(['RECEIVE', 'RESERVE', 'RELEASE', 'ISSUE', 'QUARANTINE', 'TRANSITION'] as ActionTab[]).map((tab) => (
           <button
             key={tab}
@@ -177,10 +177,10 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
               setActiveTab(tab);
               setErrorMessage(null);
             }}
-            className={`px-3 py-1.5 rounded transition-colors whitespace-nowrap ${
+            className={`px-3 py-1.5 rounded transition-colors whitespace-nowrap font-medium ${
               activeTab === tab
-                ? 'bg-cyan-900/60 text-cyan-200 border border-cyan-700'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-cyan-50 text-cyan-800 border border-cyan-300 dark:bg-cyan-900/60 dark:text-cyan-200 dark:border-cyan-700'
+                : 'text-foreground-secondary hover:text-foreground hover:bg-surface-elevated'
             }`}
           >
             {tab}
@@ -199,12 +199,12 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
           e.preventDefault();
           handleAction(activeTab);
         }}
-        className="space-y-3 font-mono text-xs"
+        className="space-y-3 text-sm"
       >
         {activeTab !== 'TRANSITION' ? (
           <div>
-            <label htmlFor="lot-quantity" className="block text-slate-400 mb-1">
-              Quantity <span className="text-rose-400">*</span>
+            <label htmlFor="lot-quantity" className="block text-foreground-secondary mb-1">
+              Quantity <span className="text-rose-500">*</span>
             </label>
             <input
               id="lot-quantity"
@@ -213,20 +213,20 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
               min="0.001"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               required
             />
           </div>
         ) : (
           <div>
-            <label htmlFor="target-status" className="block text-slate-400 mb-1">
-              Target Status <span className="text-rose-400">*</span>
+            <label htmlFor="target-status" className="block text-foreground-secondary mb-1">
+              Target Status <span className="text-rose-500">*</span>
             </label>
             <select
               id="target-status"
               value={targetStatus}
               onChange={(e) => setTargetStatus(e.target.value as InventoryStatus)}
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               required
             >
               <option value="">Select next status...</option>
@@ -237,7 +237,7 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
               ))}
             </select>
             {validNextStatuses.length === 0 && (
-              <p className="mt-1 text-slate-500 text-[11px]">
+              <p className="mt-1 text-foreground-muted text-[11px]">
                 Status {lot.status} has no further valid state machine transitions.
               </p>
             )}
@@ -246,8 +246,8 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
 
         {activeTab === 'ISSUE' && (
           <div>
-            <label htmlFor="issued-to" className="block text-slate-400 mb-1">
-              Issued To (Recipient/Team) <span className="text-rose-400">*</span>
+            <label htmlFor="issued-to" className="block text-foreground-secondary mb-1">
+              Issued To (Recipient/Team) <span className="text-rose-500">*</span>
             </label>
             <input
               id="issued-to"
@@ -255,7 +255,7 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
               value={issuedTo}
               onChange={(e) => setIssuedTo(e.target.value)}
               placeholder="e.g. Field Team Charlie"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               required
             />
           </div>
@@ -263,8 +263,8 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
 
         {activeTab === 'QUARANTINE' && (
           <div>
-            <label htmlFor="quarantine-reason" className="block text-slate-400 mb-1">
-              Quarantine Reason <span className="text-rose-400">*</span>
+            <label htmlFor="quarantine-reason" className="block text-foreground-secondary mb-1">
+              Quarantine Reason <span className="text-rose-500">*</span>
             </label>
             <input
               id="quarantine-reason"
@@ -272,7 +272,7 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. Cold chain excursion detected"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
               required
             />
           </div>
@@ -280,7 +280,7 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
 
         {activeTab === 'TRANSITION' && (
           <div>
-            <label htmlFor="transition-reason" className="block text-slate-400 mb-1">
+            <label htmlFor="transition-reason" className="block text-foreground-secondary mb-1">
               Transition Justification
             </label>
             <input
@@ -289,14 +289,14 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Operational justification"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
             />
           </div>
         )}
 
         {activeTab !== 'TRANSITION' && (
           <div>
-            <label htmlFor="lot-reference" className="block text-slate-400 mb-1">
+            <label htmlFor="lot-reference" className="block text-foreground-secondary mb-1">
               Reference / Identifier
             </label>
             <input
@@ -305,13 +305,13 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
               value={reference}
               onChange={(e) => setReference(e.target.value)}
               placeholder="e.g. PO-9812 / MISSION-ALFA"
-              className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
             />
           </div>
         )}
 
         <div>
-          <label htmlFor="lot-notes" className="block text-slate-400 mb-1">
+          <label htmlFor="lot-notes" className="block text-foreground-secondary mb-1">
             Operational Notes
           </label>
           <input
@@ -320,14 +320,14 @@ export function InventoryActions({ lot, onActionComplete }: Props) {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Audit/operational remarks"
-            className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500"
+            className="w-full bg-surface-elevated border border-border rounded px-3 py-2 text-foreground focus:outline-none focus:border-cyan-500"
           />
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting || (activeTab === 'TRANSITION' && validNextStatuses.length === 0)}
-          className="w-full mt-2 py-2 px-4 rounded bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
+          className="w-full mt-2 py-2 px-4 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Processing...' : `Execute ${activeTab}`}
         </button>

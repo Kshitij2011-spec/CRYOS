@@ -32,36 +32,36 @@ function getEntryTypeBadge(type: TimelineEntryType) {
       return {
         label: 'EVENT',
         icon: Radio,
-        color: 'text-cyan-400 border-cyan-800 bg-cyan-950/60',
+        color: 'text-cyan-700 border-cyan-200 bg-cyan-50 dark:text-cyan-400 dark:border-cyan-800 dark:bg-cyan-950/60',
         dot: 'border-cyan-500 bg-cyan-400',
       };
     case 'AUDIT_RECORD':
       return {
         label: 'AUDIT',
         icon: FileText,
-        color: 'text-amber-400 border-amber-800 bg-amber-950/60',
+        color: 'text-amber-700 border-amber-200 bg-amber-50 dark:text-amber-400 dark:border-amber-800 dark:bg-amber-950/60',
         dot: 'border-amber-500 bg-amber-400',
       };
     case 'PROPAGATION_RECORD':
       return {
         label: 'PROPAGATION',
         icon: Share2,
-        color: 'text-purple-400 border-purple-800 bg-purple-950/60',
+        color: 'text-purple-700 border-purple-200 bg-purple-50 dark:text-purple-400 dark:border-purple-800 dark:bg-purple-950/60',
         dot: 'border-purple-500 bg-purple-400',
       };
     case 'OFFLINE_SYNC':
       return {
         label: 'SYNC',
         icon: WifiOff,
-        color: 'text-emerald-400 border-emerald-800 bg-emerald-950/60',
+        color: 'text-emerald-700 border-emerald-200 bg-emerald-50 dark:text-emerald-400 dark:border-emerald-800 dark:bg-emerald-950/60',
         dot: 'border-emerald-500 bg-emerald-400',
       };
     default:
       return {
         label: 'RECORD',
         icon: Radio,
-        color: 'text-slate-400 border-slate-700 bg-slate-900',
-        dot: 'border-slate-600 bg-slate-400',
+        color: 'text-foreground-muted border-border bg-surface-muted',
+        dot: 'border-border bg-foreground-muted',
       };
   }
 }
@@ -110,12 +110,12 @@ export function OperationalTimeline({
   return (
     <div className="space-y-4 font-mono text-xs">
       {/* Header with Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg bg-slate-900/60 border border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg bg-surface border border-border">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-cyan-400" />
-          <h4 className="font-semibold text-slate-200 tracking-wide">{title}</h4>
+          <Clock className="w-4 h-4 text-accent" />
+          <h4 className="font-semibold text-foreground tracking-wide">{title}</h4>
           {data && (
-            <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[10px]">
+            <span className="px-2 py-0.5 rounded-full bg-surface-muted text-foreground-muted text-[10px]">
               {totalEntries} {totalEntries === 1 ? 'entry' : 'entries'}
             </span>
           )}
@@ -124,7 +124,7 @@ export function OperationalTimeline({
         <div className="flex items-center gap-3">
           {/* Include Related Toggle */}
           {showIncludeRelatedToggle && (
-            <label className="flex items-center gap-1.5 cursor-pointer text-slate-400 hover:text-slate-200 select-none text-[11px]">
+            <label className="flex items-center gap-1.5 cursor-pointer text-foreground-muted hover:text-foreground select-none text-[11px]">
               <input
                 type="checkbox"
                 checked={includeRelated}
@@ -132,7 +132,7 @@ export function OperationalTimeline({
                   setIncludeRelated(e.target.checked);
                   setPage(1);
                 }}
-                className="rounded border-slate-700 bg-slate-950 text-cyan-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                className="rounded border-border bg-surface text-accent focus:ring-0 focus:ring-offset-0 cursor-pointer"
               />
               <span>Include Related</span>
             </label>
@@ -142,7 +142,7 @@ export function OperationalTimeline({
           <button
             type="button"
             onClick={() => setOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'))}
-            className="flex items-center gap-1 px-2 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-[11px] transition-colors"
+            className="flex items-center gap-1 px-2 py-1 rounded bg-surface-elevated hover:bg-surface-muted border border-border text-foreground text-[11px] transition-colors"
             title="Toggle chronological order"
           >
             <SlidersHorizontal className="w-3 h-3" />
@@ -157,13 +157,13 @@ export function OperationalTimeline({
       {error && <ErrorDisplay error={error} />}
 
       {!isLoading && !error && data && entries.length === 0 && (
-        <div className="p-6 text-center text-slate-500 border border-slate-800/80 rounded-lg bg-slate-900/30">
+        <div className="p-6 text-center text-foreground-muted border border-border rounded-lg bg-surface-muted/50">
           No operational history or events recorded for this entity.
         </div>
       )}
 
       {!isLoading && !error && data && entries.length > 0 && (
-        <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+        <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
           {entries.map((entry: TimelineEntry) => {
             const typeInfo = getEntryTypeBadge(entry.entry_type);
             const Icon = typeInfo.icon;
@@ -174,13 +174,13 @@ export function OperationalTimeline({
               <div key={entry.id} className="relative group">
                 {/* Timeline Dot */}
                 <div
-                  className={`absolute -left-6 top-1.5 w-4 h-4 rounded-full bg-slate-950 border-2 ${typeInfo.dot} flex items-center justify-center`}
+                  className={`absolute -left-6 top-1.5 w-4 h-4 rounded-full bg-surface border-2 ${typeInfo.dot} flex items-center justify-center`}
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
                 </div>
 
                 {/* Timeline Item Card */}
-                <div className="p-3.5 rounded-lg bg-slate-900/80 border border-slate-800/90 hover:border-slate-700 space-y-2 transition-colors">
+                <div className="p-3.5 rounded-lg bg-surface border border-border hover:border-border-strong space-y-2 transition-colors">
                   {/* Row 1: Header (Badge, Action Name, Timestamp) */}
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
@@ -190,22 +190,22 @@ export function OperationalTimeline({
                         <Icon className="w-3 h-3" />
                         {typeInfo.label}
                       </span>
-                      <span className="font-semibold text-slate-200">
+                      <span className="font-semibold text-foreground">
                         {entry.event_or_action}
                       </span>
                       {entry.audit_action && entry.audit_action !== entry.event_or_action && (
-                        <span className="px-1.5 py-0.5 rounded bg-amber-950/40 border border-amber-800/60 text-amber-300 text-[10px]">
+                        <span className="px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 text-[10px]">
                           Audit: {entry.audit_action}
                         </span>
                       )}
                       {entry.related_entity_type && (
-                        <span className="px-1.5 py-0.5 rounded bg-indigo-950/60 border border-indigo-800/60 text-indigo-300 text-[10px]">
+                        <span className="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/60 text-indigo-800 dark:text-indigo-300 text-[10px]">
                           Related: {entry.related_entity_type}
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+                    <div className="flex items-center gap-1.5 text-foreground-muted text-[11px]">
                       <Clock className="w-3 h-3" />
                       <span>{formatDate(entry.timestamp)}</span>
                     </div>
@@ -214,26 +214,26 @@ export function OperationalTimeline({
                   {/* Row 2: State Transitions / Description */}
                   {entry.previous_state && entry.new_state ? (
                     <div className="flex items-center gap-2 py-1 text-[11px]">
-                      <span className="px-2 py-0.5 rounded bg-slate-800/80 text-slate-400 border border-slate-700">
+                      <span className="px-2 py-0.5 rounded bg-surface-muted text-foreground-muted border border-border">
                         {entry.previous_state}
                       </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-500" />
-                      <span className="px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800">
+                      <ArrowRight className="w-3.5 h-3.5 text-foreground-muted" />
+                      <span className="px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/30 font-medium">
                         {entry.new_state}
                       </span>
                     </div>
                   ) : entry.description ? (
-                    <p className="text-slate-300 text-[11px] leading-relaxed">
+                    <p className="text-foreground-secondary text-[11px] leading-relaxed">
                       {entry.description}
                     </p>
                   ) : null}
 
                   {/* Row 3: Footer Metadata (Actor, CID, Provenance, Expand Toggle) */}
-                  <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500 border-t border-slate-800/60">
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-[10px] text-foreground-muted border-t border-border">
                     <div className="flex items-center gap-3">
                       <span>
                         Actor:{' '}
-                        <span className="text-slate-300">
+                        <span className="text-foreground">
                           {entry.actor_id ? entry.actor_id.slice(0, 8) : entry.actor_type ?? 'SYSTEM'}
                         </span>
                       </span>
@@ -241,7 +241,7 @@ export function OperationalTimeline({
                       {entry.correlation_id && (
                         <span title={`Correlation ID: ${entry.correlation_id}`}>
                           CID:{' '}
-                          <span className="text-slate-300 font-mono">
+                          <span className="text-foreground font-mono">
                             {entry.correlation_id.slice(0, 8)}…
                           </span>
                         </span>
@@ -254,7 +254,7 @@ export function OperationalTimeline({
                       <button
                         type="button"
                         onClick={() => toggleExpand(entry.id)}
-                        className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors"
+                        className="flex items-center gap-1 text-accent hover:underline transition-colors"
                       >
                         <span>{isExpanded ? 'Hide Details' : 'View Details'}</span>
                         {isExpanded ? (
@@ -268,7 +268,7 @@ export function OperationalTimeline({
 
                   {/* Expanded JSON Inspector */}
                   {isExpanded && hasDetails && (
-                    <div className="mt-2 p-2.5 rounded bg-slate-950/90 border border-slate-800 text-[11px] text-slate-300 overflow-x-auto">
+                    <div className="mt-2 p-2.5 rounded bg-surface-muted border border-border text-[11px] text-foreground overflow-x-auto">
                       <pre className="font-mono whitespace-pre-wrap break-all">
                         {JSON.stringify(entry.details, null, 2)}
                       </pre>
@@ -283,7 +283,7 @@ export function OperationalTimeline({
 
       {/* Pagination Controls */}
       {!isLoading && data && data.total_pages > 1 && (
-        <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+        <div className="flex items-center justify-between pt-2 border-t border-border text-[11px] text-foreground-muted">
           <span>
             Page {data.page} of {data.total_pages}
           </span>
@@ -292,7 +292,7 @@ export function OperationalTimeline({
               type="button"
               disabled={page <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors"
+              className="p-1 rounded bg-surface-elevated hover:bg-surface-muted border border-border disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-colors"
               aria-label="Previous page"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -301,7 +301,7 @@ export function OperationalTimeline({
               type="button"
               disabled={page >= data.total_pages}
               onClick={() => setPage((p) => Math.min(data.total_pages, p + 1))}
-              className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 transition-colors"
+              className="p-1 rounded bg-surface-elevated hover:bg-surface-muted border border-border disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-colors"
               aria-label="Next page"
             >
               <ChevronRight className="w-4 h-4" />

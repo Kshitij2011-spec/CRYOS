@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Cpu, Search, Filter } from 'lucide-react';
 import { PageHeader } from '../../components/shared/PageHeader';
+import { AutoRefreshIndicator } from '../../components/shared/AutoRefreshIndicator';
 import { EntityCode } from '../../components/shared/EntityCode';
 import { StatusBadge } from '../../components/shared/StatusBadge';
 import { ProvenanceTag } from '../../components/shared/ProvenanceTag';
@@ -9,6 +10,7 @@ import { EmptyState } from '../../components/shared/EmptyState';
 import { ErrorDisplay } from '../../components/shared/ErrorDisplay';
 import { AssetDetailPanel } from './AssetDetailPanel';
 import { useAssets } from './hooks/useAssets';
+import { useLocationsLookup } from '../locations/hooks/useLocations';
 import type { Asset, AssetStatus, AssetCriticality } from '../../lib/types/api';
 
 const STATUS_OPTIONS: Array<AssetStatus | 'ALL'> = [
@@ -44,10 +46,14 @@ export function AssetsPage() {
 
   const {
     data: assets = [],
+    dataUpdatedAt,
+    isFetching,
     isLoading,
     error,
     refetch,
   } = useAssets(filters);
+
+  const locationsLookup = useLocationsLookup();
 
   const filteredAssets = useMemo(() => {
     if (!searchQuery.trim()) return assets;
@@ -66,36 +72,39 @@ export function AssetsPage() {
         title="Assets & Maintenance"
         subtitle="Polar expedition equipment registry, readiness lifecycle, relocation, and maintenance tracking"
         actions={
-          <div className="flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-slate-500" aria-hidden="true" />
-            <span className="text-slate-400 text-xs font-mono">{filteredAssets.length} assets</span>
+          <div className="flex items-center gap-3">
+            <AutoRefreshIndicator dataUpdatedAt={dataUpdatedAt} intervalSeconds={25} isFetching={isFetching} />
+            <div className="flex items-center gap-1.5">
+              <Cpu className="w-4 h-4 text-slate-500" aria-hidden="true" />
+              <span className="text-slate-400 text-xs">{filteredAssets.length} assets</span>
+            </div>
           </div>
         }
       />
 
       {/* Control Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-slate-900/40 p-4 rounded-lg border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-surface p-4 rounded-lg border border-border">
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[200px] max-w-xs">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
+            <Search className="w-4 h-4 text-foreground-muted absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
             <input
               type="search"
               placeholder="Search by code, type, serial..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-surface-elevated border border-border rounded-lg pl-9 pr-4 py-2 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-cyan-500 transition-colors"
               aria-label="Search assets"
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-slate-500" aria-hidden="true" />
+            <Filter className="w-4 h-4 text-foreground-muted" aria-hidden="true" />
             <label htmlFor="asset-status-filter" className="sr-only">Filter by Status</label>
             <select
               id="asset-status-filter"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as AssetStatus | 'ALL')}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-cyan-500 transition-colors"
             >
               {STATUS_OPTIONS.map((st) => (
                 <option key={st} value={st}>
@@ -111,7 +120,7 @@ export function AssetsPage() {
               id="asset-criticality-filter"
               value={criticalityFilter}
               onChange={(e) => setCriticalityFilter(e.target.value as AssetCriticality | 'ALL')}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-cyan-500 transition-colors"
             >
               {CRITICALITY_OPTIONS.map((c) => (
                 <option key={c} value={c}>
@@ -122,7 +131,7 @@ export function AssetsPage() {
           </div>
         </div>
 
-        <span className="text-xs font-mono text-slate-400 self-center">
+        <span className="text-xs text-foreground-secondary self-center">
           Showing {filteredAssets.length} asset{filteredAssets.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -142,7 +151,7 @@ export function AssetsPage() {
 
       {!isLoading && !error && filteredAssets.length === 0 && (
         <EmptyState
-          icon={<Cpu className="w-12 h-12 text-slate-600" aria-hidden="true" />}
+          icon={<Cpu className="w-12 h-12 text-foreground-muted" aria-hidden="true" />}
           title="No Assets Found"
           message={
             searchQuery || statusFilter !== 'ALL' || criticalityFilter !== 'ALL'
@@ -153,9 +162,9 @@ export function AssetsPage() {
       )}
 
       {!isLoading && !error && filteredAssets.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900/20">
+        <div className="overflow-x-auto rounded-lg border border-border bg-surface">
           <table className="w-full text-left text-sm" role="table" aria-label="Assets table">
-            <thead className="bg-slate-900 font-mono text-xs text-slate-400 uppercase tracking-wider border-b border-slate-800">
+            <thead className="bg-surface-muted text-xs font-semibold text-foreground-secondary uppercase tracking-[0.05em] border-b border-border">
               <tr>
                 <th className="px-4 py-3">Asset Code</th>
                 <th className="px-4 py-3">Type</th>
@@ -168,19 +177,19 @@ export function AssetsPage() {
                 <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono text-xs">
+            <tbody className="divide-y divide-border/60 text-sm">
               {filteredAssets.map((asset: Asset) => (
                 <tr
                   key={asset.id}
-                  className="hover:bg-slate-800/40 transition-colors"
+                  className="hover:bg-surface-elevated transition-colors"
                 >
-                  <td className="px-4 py-3 font-semibold text-slate-200">
+                  <td className="px-4 py-3 font-semibold text-foreground">
                     <EntityCode code={asset.code} />
                   </td>
-                  <td className="px-4 py-3 font-sans font-medium text-slate-200">
+                  <td className="px-4 py-3 font-sans font-medium text-foreground">
                     {asset.type}
                   </td>
-                  <td className="px-4 py-3 text-slate-400">
+                  <td className="px-4 py-3 text-foreground-secondary">
                     {asset.serial_number ?? '-'}
                   </td>
                   <td className="px-4 py-3">
@@ -188,22 +197,22 @@ export function AssetsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`inline-flex px-1.5 py-0.5 rounded text-[11px] font-semibold ${
+                      className={`inline-flex px-2 py-0.5 rounded text-[11px] font-semibold border ${
                         asset.condition === 'OPERATIONAL'
-                          ? 'text-emerald-400'
+                          ? 'text-emerald-800 bg-emerald-50 border-emerald-300 dark:text-emerald-400 dark:bg-emerald-950/40 dark:border-emerald-800/60'
                           : asset.condition === 'DEGRADED'
-                          ? 'text-amber-400'
-                          : 'text-rose-400'
+                          ? 'text-amber-800 bg-amber-50 border-amber-300 dark:text-amber-300 dark:bg-amber-950/40 dark:border-amber-800/60'
+                          : 'text-rose-800 bg-rose-50 border-rose-300 dark:text-rose-400 dark:bg-rose-950/40 dark:border-rose-800/60'
                       }`}
                     >
                       {asset.condition}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-slate-400">
+                  <td className="px-4 py-3 text-foreground-secondary">
                     {asset.criticality}
                   </td>
-                  <td className="px-4 py-3 text-slate-400 truncate max-w-[120px]" title={asset.location_id}>
-                    {asset.location_id.slice(0, 8)}...
+                  <td className="px-4 py-3 text-foreground truncate max-w-[140px]" title={asset.location_id}>
+                    {asset.location_id ? (locationsLookup.get(asset.location_id)?.name ?? `${asset.location_id.slice(0, 8)}…`) : '—'}
                   </td>
                   <td className="px-4 py-3">
                     <ProvenanceTag provenance={asset.data_provenance} />
@@ -212,7 +221,7 @@ export function AssetsPage() {
                     <button
                       type="button"
                       onClick={() => setSelectedAsset(asset)}
-                      className="px-3 py-1 rounded text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition-colors"
+                      className="px-3 py-1 rounded text-xs bg-surface-elevated hover:bg-surface-muted text-foreground border border-border transition-colors font-medium"
                       aria-label={`Inspect ${asset.code}`}
                     >
                       Inspect

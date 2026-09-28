@@ -29,27 +29,27 @@ export function OfflineSyncIndicator({ onOpenDrawer, showToggle = true }: Props)
     >
       {/* Connectivity Status Badge */}
       <div
-        className={`flex items-center gap-2 px-2.5 py-1 rounded-md border shadow-sm transition-colors ${
+        className={`flex items-center gap-2 px-2.5 py-1 rounded-md border transition-colors ${
           effectiveOnline
-            ? 'bg-emerald-950/40 border-emerald-800/80 text-emerald-300'
-            : 'bg-amber-950/70 border-amber-500/80 text-amber-300'
+            ? 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-800/80 dark:text-emerald-300'
+            : 'bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-950/70 dark:border-amber-500/80 dark:text-amber-300'
         }`}
       >
         {effectiveOnline ? (
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <Wifi className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400" />
+            <Wifi className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" aria-hidden="true" />
             <span className="font-semibold tracking-wide">ONLINE</span>
           </span>
         ) : (
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <WifiOff className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse dark:bg-amber-400" />
+            <WifiOff className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" aria-hidden="true" />
             <span className="font-semibold tracking-wide">
               OFFLINE — FIELD BUFFERING ACTIVE
             </span>
             {isSimulatedBlackout && (
-              <span className="text-[10px] px-1 py-0.2 bg-amber-900/60 border border-amber-600/60 rounded text-amber-200">
+              <span className="text-[10px] px-1 py-0.5 bg-amber-100 border border-amber-300 rounded text-amber-700 dark:bg-amber-900/60 dark:border-amber-600/60 dark:text-amber-200">
                 [SYNTHETIC/DEMO]
               </span>
             )}
@@ -59,7 +59,7 @@ export function OfflineSyncIndicator({ onOpenDrawer, showToggle = true }: Props)
         {/* Sync in progress indicator */}
         {isSyncing && (
           <span title="Syncing...">
-            <RefreshCw className="w-3 h-3 text-cyan-400 animate-spin ml-1" />
+            <RefreshCw className="w-3 h-3 text-accent animate-spin ml-1" />
           </span>
         )}
       </div>
@@ -69,19 +69,19 @@ export function OfflineSyncIndicator({ onOpenDrawer, showToggle = true }: Props)
         type="button"
         onClick={onOpenDrawer}
         data-testid="sync-drawer-toggle-btn"
-        className="flex items-center gap-2 px-2.5 py-1 rounded-md border border-slate-800 bg-slate-900/80 hover:bg-slate-800 hover:border-slate-700 text-slate-300 transition-colors"
+        className="flex items-center gap-2 px-2.5 py-1 rounded-md border border-[var(--border-color)] bg-surface hover:bg-surface-elevated text-foreground-secondary transition-colors"
         title="Open Offline Synchronization Drawer"
       >
-        <span className="text-slate-400">
-          Queued: <strong className={queuedCount > 0 ? 'text-amber-400' : 'text-slate-200'}>{queuedCount}</strong>
+        <span>
+          Queued: <strong className={queuedCount > 0 ? 'text-status-warning' : 'text-foreground'}>{queuedCount}</strong>
         </span>
-        <span className="text-slate-600">|</span>
-        <span className="text-slate-400">
-          Failed: <strong className={failedCount > 0 ? 'text-rose-400' : 'text-slate-200'}>{failedCount}</strong>
+        <span className="text-foreground-muted">|</span>
+        <span>
+          Failed: <strong className={failedCount > 0 ? 'text-status-critical' : 'text-foreground'}>{failedCount}</strong>
         </span>
-        <span className="text-slate-600">|</span>
-        <span className="text-slate-400">
-          Last sync: <span className="text-slate-300">{formattedLastSync}</span>
+        <span className="text-foreground-muted">|</span>
+        <span>
+          Last sync: <span className="text-foreground-secondary">{formattedLastSync}</span>
         </span>
       </button>
 
@@ -93,8 +93,8 @@ export function OfflineSyncIndicator({ onOpenDrawer, showToggle = true }: Props)
           data-testid="blackout-toggle-btn"
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs transition-colors ${
             isSimulatedBlackout
-              ? 'bg-rose-950/60 border-rose-600 text-rose-300 hover:bg-rose-900/70'
-              : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+              ? 'bg-rose-50 border-rose-300 text-rose-700 hover:bg-rose-100 dark:bg-rose-950/60 dark:border-rose-600 dark:text-rose-300 dark:hover:bg-rose-900/70'
+              : 'bg-surface border-[var(--border-color)] text-foreground-muted hover:bg-surface-elevated hover:text-foreground'
           }`}
           title="Simulate Antarctic Communications Blackout [SYNTHETIC/DEMO]"
         >

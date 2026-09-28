@@ -28,7 +28,7 @@ describe('App Routing Integration', () => {
     vi.mocked(apiClient.get).mockResolvedValue([]);
   });
 
-  it('redirects root route / to /control-tower and displays Control Tower', async () => {
+  it('renders product Landing Page on root route /', async () => {
     const queryClient = createTestQueryClient();
     render(
       <QueryClientProvider client={queryClient}>
@@ -39,10 +39,10 @@ describe('App Routing Integration', () => {
     );
 
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Control Tower' }),
+      await screen.findByRole('heading', { level: 1, name: /see the mission/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText('Operational command center & mission readiness posture'),
+      screen.getByText(/CRYOS connects expedition logistics/i),
     ).toBeInTheDocument();
   });
 
@@ -59,9 +59,12 @@ describe('App Routing Integration', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Control Tower' }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText('Operational command center & mission readiness posture'),
+    ).toBeInTheDocument();
   });
 
-  it('renders sidebar navigation with prominent Control Tower link', async () => {
+  it('renders sidebar navigation with prominent Control Tower link on operational routes', async () => {
     const queryClient = createTestQueryClient();
     render(
       <QueryClientProvider client={queryClient}>

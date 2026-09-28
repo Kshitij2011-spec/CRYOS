@@ -99,6 +99,8 @@ export function useControlTowerFastOverview(expeditionId?: string) {
       const query = buildQuery({ expedition_id: expeditionId });
       return await apiClient.get<ControlTowerOverview>(`/control-tower/overview/fast${query}`);
     },
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -109,6 +111,8 @@ export function useControlTowerOverview(expeditionId?: string) {
       const query = buildQuery({ expedition_id: expeditionId });
       return await apiClient.get<ControlTowerOverview>(`/control-tower/overview${query}`);
     },
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -121,6 +125,8 @@ export function useExpeditionSummary(expeditionId: string) {
       );
     },
     enabled: Boolean(expeditionId),
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -142,6 +148,8 @@ export function useMissionOperations(
       );
     },
     enabled: Boolean(expeditionId),
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -163,6 +171,8 @@ export function useControlTowerConstraints(
       );
     },
     enabled: Boolean(expeditionId),
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -186,6 +196,8 @@ export function useOperationalEventsFeed(
       );
     },
     enabled: Boolean(expeditionId),
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -198,6 +210,8 @@ export function useDecisionQueue(expeditionId: string) {
       );
     },
     enabled: Boolean(expeditionId),
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -221,6 +235,8 @@ export function useConsequentialAudit(expeditionId: string, page: number = 1) {
       );
     },
     enabled: Boolean(expeditionId),
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -234,6 +250,8 @@ export function usePersonnelSafety(expeditionId?: string | null) {
       );
     },
     enabled: Boolean(expeditionId),
+    refetchInterval: 12_000,
+    refetchIntervalInBackground: false,
   });
 }
 

@@ -14,5 +14,7 @@ export function useConsignments(filters: ConsignmentFilters = {}) {
   return useQuery<CargoConsignment[]>({
     queryKey: ['cargo-consignments', filters],
     queryFn: ({ signal }) => apiClient.get<CargoConsignment[]>(`/cargo/consignments${query}`, signal),
+    refetchInterval: 25_000,
+    refetchIntervalInBackground: false,
   });
 }

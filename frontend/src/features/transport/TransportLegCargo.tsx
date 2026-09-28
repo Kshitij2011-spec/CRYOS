@@ -33,15 +33,15 @@ export function TransportLegCargo({ legId, onSelectConsignment }: Props) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Package className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-          <h4 className="text-xs font-semibold text-slate-200">
+          <Package className="w-4 h-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
+          <h4 className="text-xs font-semibold text-foreground">
             Manifested Cargo ({items.length})
           </h4>
         </div>
         <button
           type="button"
           onClick={() => setShowAssign(!showAssign)}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md bg-cyan-950/70 text-cyan-300 border border-cyan-800/80 hover:bg-cyan-900/60 transition-colors"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md bg-cyan-50 text-cyan-700 border border-cyan-300 hover:bg-cyan-100 dark:bg-cyan-950/70 dark:text-cyan-300 dark:border-cyan-800/80 dark:hover:bg-cyan-900/60 transition-colors"
         >
           <Plus className="w-3.5 h-3.5" aria-hidden="true" />
           {showAssign ? 'Cancel' : 'Manifest Cargo'}
@@ -58,14 +58,14 @@ export function TransportLegCargo({ legId, onSelectConsignment }: Props) {
       )}
 
       {items.length === 0 ? (
-        <div className="p-4 text-center rounded-lg border border-dashed border-slate-800 text-slate-500 text-xs">
+        <div className="p-4 text-center rounded-lg border border-dashed border-border text-foreground-muted text-xs">
           No cargo consignments currently manifested on this leg.
         </div>
       ) : (
-        <div className="rounded-lg border border-slate-800 overflow-hidden">
+        <div className="rounded-lg border border-border overflow-hidden bg-surface">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 font-medium">
+              <tr className="border-b border-border bg-surface-muted text-foreground-secondary font-medium">
                 <th className="py-2 px-3 font-mono">Consignment</th>
                 <th className="py-2 px-3">Status</th>
                 <th className="py-2 px-3">Risk Level</th>
@@ -73,12 +73,12 @@ export function TransportLegCargo({ legId, onSelectConsignment }: Props) {
                 <th className="py-2 px-3">Required By</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-border/60">
               {items.map((c: CargoConsignment) => (
                 <tr
                   key={c.id}
                   onClick={() => onSelectConsignment?.(c.id)}
-                  className="hover:bg-slate-900/40 cursor-pointer"
+                  className="hover:bg-surface-elevated cursor-pointer transition-colors"
                 >
                   <td className="py-2 px-3">
                     <EntityCode code={c.code} />
@@ -89,10 +89,10 @@ export function TransportLegCargo({ legId, onSelectConsignment }: Props) {
                   <td className="py-2 px-3">
                     <RiskBadge level={c.risk_level as CargoRiskLevel} />
                   </td>
-                  <td className="py-2 px-3 text-right font-mono text-slate-300">
+                  <td className="py-2 px-3 text-right font-mono text-foreground">
                     P{c.priority}
                   </td>
-                  <td className="py-2 px-3 font-mono text-slate-400">
+                  <td className="py-2 px-3 font-mono text-foreground-secondary">
                     {new Date(c.required_by_at).toLocaleDateString()}
                   </td>
                 </tr>

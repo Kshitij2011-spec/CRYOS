@@ -102,12 +102,12 @@ describe('OperationalEventsFeed', () => {
 
     await waitFor(() => {
       expect(screen.getByText('MissionApproved')).toBeInTheDocument();
-      expect(screen.getByText('MISSION:msn-1010')).toBeInTheDocument();
+      expect(screen.getByText('MISSION:msn-1010101')).toBeInTheDocument();
       expect(screen.getByText('PROPOSED')).toBeInTheDocument();
       expect(screen.getByText('APPROVED')).toBeInTheDocument();
 
       expect(screen.getByText('TransportLegDeparted')).toBeInTheDocument();
-      expect(screen.getByText('TRANSPORT_LEG:leg-2020')).toBeInTheDocument();
+      expect(screen.getByText('TRANSPORT_LEG:leg-2020202')).toBeInTheDocument();
       expect(screen.getByText('READY')).toBeInTheDocument();
       expect(screen.getByText('IN_TRANSIT')).toBeInTheDocument();
     });
@@ -127,21 +127,29 @@ describe('OperationalEventsFeed', () => {
       expect(screen.getByText('MissionApproved')).toBeInTheDocument();
     });
 
+    // Expand activity view to access filters
+    const expandBtn = screen.getByRole('button', { name: /view activity/i });
+    await user.click(expandBtn);
+
     // Select Entity Type
     const entitySelect = screen.getByLabelText(/filter events by entity type/i);
     await user.selectOptions(entitySelect, 'MISSION');
 
-    expect(apiClient.get).toHaveBeenCalledWith(
-      expect.stringContaining('entity_type=MISSION'),
-    );
+    await waitFor(() => {
+      expect(apiClient.get).toHaveBeenCalledWith(
+        expect.stringContaining('entity_type=MISSION'),
+      );
+    });
 
     // Type Event Type
     const eventInput = screen.getByLabelText(/filter events by event type/i);
     await user.type(eventInput, 'MissionApproved');
 
-    expect(apiClient.get).toHaveBeenCalledWith(
-      expect.stringContaining('event_type=MissionApproved'),
-    );
+    await waitFor(() => {
+      expect(apiClient.get).toHaveBeenCalledWith(
+        expect.stringContaining('event_type=MissionApproved'),
+      );
+    });
   });
 
   it('toggles evidence expansion to display structured event details', async () => {
@@ -153,6 +161,10 @@ describe('OperationalEventsFeed', () => {
     await waitFor(() => {
       expect(screen.getByText('MissionApproved')).toBeInTheDocument();
     });
+
+    // Expand activity view to access evidence details
+    const expandBtn = screen.getByRole('button', { name: /view activity/i });
+    await user.click(expandBtn);
 
     const toggleButton = screen.getAllByRole('button', {
       name: /show evidence & details/i,
@@ -181,6 +193,14 @@ describe('OperationalEventsFeed', () => {
     const user = userEvent.setup();
 
     renderWithProviders(<OperationalEventsFeed expeditionId="exp-1" />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /view activity/i })).toBeInTheDocument();
+    });
+
+    // Expand activity view to access pagination
+    const expandBtn = screen.getByRole('button', { name: /view activity/i });
+    await user.click(expandBtn);
 
     await waitFor(() => {
       expect(screen.getByText('Page 1')).toBeInTheDocument();

@@ -17,11 +17,11 @@ export function EmptyState({
       role="status"
       aria-label={title}
     >
-      <div className="mb-4 text-slate-600">
+      <div className="mb-4 text-foreground-muted">
         {icon ?? <PackageSearch className="w-12 h-12" aria-hidden="true" />}
       </div>
-      <h3 className="text-slate-300 font-medium mb-1">{title}</h3>
-      <p className="text-slate-500 text-sm max-w-sm">{message}</p>
+      <h3 className="text-foreground-secondary font-medium mb-1">{title}</h3>
+      <p className="text-foreground-muted text-sm max-w-sm">{message}</p>
     </div>
   );
 }

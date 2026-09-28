@@ -26,9 +26,9 @@ const TRANSPORT_STATUSES: TransportStatus[] = [
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-3 py-2 border-b border-slate-800/60 last:border-0">
-      <span className="text-slate-500 text-xs w-36 shrink-0 pt-0.5">{label}</span>
-      <span className="text-slate-200 text-sm break-all">{value ?? <span className="text-slate-600 italic">—</span>}</span>
+    <div className="flex items-start gap-3 py-2 border-b border-border last:border-0">
+      <span className="text-foreground-muted text-xs w-36 shrink-0 pt-0.5">{label}</span>
+      <span className="text-foreground text-sm break-all">{value ?? <span className="text-foreground-muted italic">—</span>}</span>
     </div>
   );
 }
@@ -73,16 +73,16 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
 
   return (
     <div
-      className="fixed inset-y-0 right-0 z-40 w-full max-w-xl flex flex-col bg-slate-900 border-l border-slate-700 shadow-2xl"
+      className="fixed inset-y-0 right-0 z-40 w-full max-w-xl flex flex-col bg-surface border-l border-border shadow-2xl"
       role="dialog"
       aria-modal="true"
       aria-label="Transport leg details"
     >
       {/* Header */}
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm">
-        <Truck className="w-5 h-5 text-cyan-400" aria-hidden="true" />
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-border bg-surface backdrop-blur-sm">
+        <Truck className="w-5 h-5 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
         <div className="flex-1 min-w-0">
-          <h2 className="text-slate-100 font-semibold text-sm truncate">
+          <h2 className="text-foreground font-semibold text-sm truncate">
             {isLoading ? 'Loading…' : (leg?.code ?? 'Transport Leg')}
           </h2>
         </div>
@@ -90,7 +90,7 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
         <button
           type="button"
           onClick={onClose}
-          className="text-slate-500 hover:text-slate-200 transition-colors ml-2"
+          className="text-foreground-muted hover:text-foreground transition-colors ml-2"
           aria-label="Close panel"
         >
           <X className="w-5 h-5" />
@@ -99,14 +99,14 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
 
       {/* Tabs */}
       {leg && (
-        <div className="flex border-b border-slate-800 bg-slate-950/40 px-6 text-xs">
+        <div className="flex border-b border-border bg-surface-muted/40 px-6 text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
             className={`py-2.5 px-3 font-medium border-b-2 transition-colors ${
               activeTab === 'overview'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-cyan-500 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300'
+                : 'border-transparent text-foreground-muted hover:text-foreground'
             }`}
           >
             Overview
@@ -116,8 +116,8 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
             onClick={() => setActiveTab('cargo')}
             className={`py-2.5 px-3 font-medium border-b-2 transition-colors ${
               activeTab === 'cargo'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-cyan-500 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300'
+                : 'border-transparent text-foreground-muted hover:text-foreground'
             }`}
           >
             Cargo Manifest
@@ -130,8 +130,8 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
             }}
             className={`py-2.5 px-3 font-medium border-b-2 transition-colors ${
               activeTab === 'operations'
-                ? 'border-cyan-400 text-cyan-300'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-cyan-500 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300'
+                : 'border-transparent text-foreground-muted hover:text-foreground'
             }`}
           >
             Operations
@@ -152,26 +152,26 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
                 <div className="flex flex-wrap items-center gap-2.5">
                   <EntityCode code={leg.code} />
                   <StatusBadge status={leg.status} />
-                  <span className="px-2 py-0.5 rounded text-xs font-mono bg-cyan-950/60 text-cyan-300 border border-cyan-800/80">
+                  <span className="px-2 py-0.5 rounded text-xs font-semibold bg-cyan-500/15 text-cyan-700 border border-cyan-400/50 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800/80">
                     {leg.mode}
                   </span>
                 </div>
 
                 {leg.delay_reason && (
-                  <div className="p-3 rounded-lg border border-amber-800/60 bg-amber-950/40 text-amber-200 text-xs flex items-start gap-2.5">
-                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <div className="p-3 rounded-lg border border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-200 text-xs flex items-start gap-2.5">
+                    <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-semibold text-amber-300">Operational Delay Logged</p>
-                      <p className="mt-0.5 text-amber-200/90">{leg.delay_reason}</p>
+                      <p className="font-semibold text-amber-800 dark:text-amber-300">Operational Delay Logged</p>
+                      <p className="mt-0.5 text-amber-700 dark:text-amber-200/90">{leg.delay_reason}</p>
                     </div>
                   </div>
                 )}
 
-                <div className="divide-y divide-slate-800/60">
-                  <DetailRow label="Leg ID" value={<span className="font-mono text-xs">{leg.id}</span>} />
-                  <DetailRow label="Expedition" value={<span className="font-mono text-xs">{leg.expedition_id}</span>} />
-                  <DetailRow label="Origin Location" value={<span className="font-mono text-xs">{leg.origin_location_id}</span>} />
-                  <DetailRow label="Destination" value={<span className="font-mono text-xs">{leg.destination_location_id}</span>} />
+                <div className="divide-y divide-border">
+                  <DetailRow label="Leg ID" value={<span className="entity-id">{leg.id}</span>} />
+                  <DetailRow label="Expedition" value={<span className="entity-id">{leg.expedition_id}</span>} />
+                  <DetailRow label="Origin Location" value={<span className="entity-id">{leg.origin_location_id}</span>} />
+                  <DetailRow label="Destination" value={<span className="entity-id">{leg.destination_location_id}</span>} />
                   <DetailRow
                     label="Capacity"
                     value={
@@ -186,7 +186,7 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
                   <DetailRow
                     label="Estimated Arrival"
                     value={
-                      <span className={leg.status === 'DELAYED' ? 'text-amber-400 font-medium' : ''}>
+                      <span className={leg.status === 'DELAYED' ? 'text-amber-600 dark:text-amber-400 font-medium' : ''}>
                         {formatDate(leg.estimated_arrival_at)}
                       </span>
                     }
@@ -218,20 +218,20 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
                     onCancel={() => setShowDelayModal(false)}
                   />
                 ) : (
-                  <div className="p-4 rounded-xl border border-amber-800/50 bg-amber-950/20 flex items-center justify-between">
+                  <div className="p-4 rounded-xl border border-amber-300 bg-amber-50 dark:border-amber-800/50 dark:bg-amber-950/20 flex items-center justify-between shadow-sm">
                     <div>
-                      <h4 className="text-xs font-semibold text-amber-300 flex items-center gap-1.5">
+                      <h4 className="text-xs font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
                         <AlertTriangle className="w-3.5 h-3.5" />
                         Operational Delay Propagation
                       </h4>
-                      <p className="text-[11px] text-slate-400 mt-1">
+                      <p className="text-[11px] text-foreground-muted mt-1">
                         Record weather/logistics delays and recalculate cargo arrival timelines.
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setShowDelayModal(true)}
-                      className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-medium shrink-0 ml-3 transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-medium shrink-0 ml-3 transition-colors shadow-sm"
                     >
                       Record Delay
                     </button>
@@ -239,13 +239,13 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
                 )}
 
                 {/* Status Transition Form */}
-                <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-4">
-                  <h4 className="text-xs font-semibold text-slate-200">
+                <div className="p-4 rounded-xl border border-border bg-surface-muted space-y-4 shadow-sm">
+                  <h4 className="text-xs font-semibold text-foreground">
                     Leg Lifecycle State Transition
                   </h4>
 
                   {actionError && (
-                    <div className="text-xs text-rose-400 flex items-center gap-2">
+                    <div className="text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 shrink-0" />
                       <span>{actionError}</span>
                     </div>
@@ -253,13 +253,13 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
 
                   <div className="space-y-3 text-xs">
                     <div>
-                      <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
+                      <label className="block eyebrow mb-1.5">
                         Target Status
                       </label>
                       <select
                         value={newStatus}
                         onChange={(e) => setNewStatus(e.target.value as TransportStatus)}
-                        className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono focus:outline-none focus:border-cyan-600"
+                        className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       >
                         {TRANSPORT_STATUSES.map((st) => (
                           <option key={st} value={st}>
@@ -275,7 +275,7 @@ export function TransportLegDetailPanel({ legId, onClose, onSelectConsignment }:
                       type="button"
                       onClick={() => setConfirmPending(true)}
                       disabled={updateMutation.isPending || newStatus === leg.status}
-                      className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium transition-colors disabled:opacity-50"
+                      className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium transition-colors disabled:opacity-50 shadow-sm"
                     >
                       {updateMutation.isPending ? 'Updating…' : 'Execute State Transition'}
                     </button>
